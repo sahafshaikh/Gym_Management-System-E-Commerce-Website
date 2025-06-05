@@ -1,0 +1,962 @@
+{% extends 'base.html' %}
+
+{% block title %}GymWord - Fitness Unleashed{% endblock %}
+<style>
+    .hero-overlay {
+        background: rgba(0, 0, 0, 0.4);
+        animation: fadePulse 5s infinite;
+    }
+</style>
+{% block content %}
+<!-- Hero Section with Animation -->
+<section id="home" class="title-page">
+    <div class="hero-overlay"></div>
+    <div class="title-content">
+        <h1>Fitness Unleashed</h1>
+        <div class="taglines">
+            <span>"Strength Redefined."</span>
+            <span>"Energy Amplified."</span>
+            <span>"Your Path Begins."</span>
+        </div>
+        <a href="{% url 'plans' %}" class="btn btn-primary">Join Now</a>
+    </div>
+</section>
+
+<main>
+    <!-- Featured Workouts Section -->
+    <section id="videos" class="video-section">
+        <div class="container">
+            <h2>Featured Workouts</h2>
+            <div class="video-grid">
+                <div class="video-item">
+                    <video controls poster="https://source.unsplash.com/800x450/?workout">
+                        <source src="static/images/store/main.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <h3>Dynamic HIIT</h3>
+                    <p>High-intensity interval training to boost your metabolism and burn calories.</p>
+                </div>
+                <div class="video-item">
+                    <video controls poster="https://source.unsplash.com/800x450/?strength">
+                        <source src="static/images/store/last.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <h3>Strength Fusion</h3>
+                    <p>Combine strength training with functional movements for total body fitness.</p>
+                </div>
+                <div class="video-item">
+                    <video controls poster="https://source.unsplash.com/800x450/?core">
+                        <source src="static/images/store/core.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <h3>Core Power</h3>
+                    <p>Focus on your core muscles for better stability, balance, and posture.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="about-us">
+        <div class="container">
+            <h2>About Us</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>GymWord is your trusted fitness partner since 2010. We've helped thousands of people transform their lives through expert guidance, state-of-the-art facilities, and a supportive community.</p>
+                    <h3>Our Vision</h3>
+                    <ul>
+                        <li>Empower everyone to reach their fitness goals</li>
+                        <li>Deliver high-quality training and nutrition guidance</li>
+                        <li>Build a supportive community of fitness enthusiasts</li>
+                        <li>Promote lifelong fitness and well-being</li>
+                    </ul>
+                </div>
+                <div class="about-image">
+                    <img src="static/images/gallery/1.jpg" alt="GymWord Facility">
+                </div>
+            </div>
+            <div class="about-cta">
+                <a href="{% url 'about' %}" class="btn btn-secondary">Learn More About Us</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <style>
+      .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 20px; 
+    padding: 20px;
+    max-width: 1200px; 
+    margin: 0 auto; 
+}
+
+.gallery-item {
+    width: 100%;
+    height: auto;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 300px; 
+    object-fit: cover; 
+    border-radius: 8px; 
+    display: block;
+}
+
+/* Optional: Hover effect */
+.gallery-item img:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+}
+
+/* Responsive adjustment for smaller screens */
+@media (max-width: 768px) {
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr); 
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery-grid {
+        grid-template-columns: 1fr; 
+    }
+}
+    </style>
+    <section id="gallery" class="gallery">
+        <div class="container">
+            <h2>Gallery</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item"><img src="static/images/store/2.jpg" alt="Gym"></div>
+                <div class="gallery-item"><img src="static/images/gallery/2.jpg" alt="Yoga"></div>
+                <div class="gallery-item"><img src="static/images/gallery/3.png" alt="Weights"></div>
+                <div class="gallery-item"><img src="https://images.pexels.com/photos/3836831/pexels-photo-3836831.jpeg?" alt="Cardio"></div>
+                <div class="gallery-item"><img src="static/images/store/pers.png" alt="Trainer"></div>
+                <div class="gallery-item"><img src="static/images/gallery/6.jpg" alt="Group"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section id="why-choose-us">
+        <div class="container">
+            <h2>Why Choose Us?</h2>
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-dumbbell"></i>
+                    </div>
+                    <h3>Expert Trainers</h3>
+                    <p>Our certified trainers have years of experience to guide you on your fitness journey.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3>Modern Equipment</h3>
+                    <p>State-of-the-art equipment for all fitness levels and goals.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3>Flexible Plans</h3>
+                    <p>Choose from various membership options that fit your schedule and budget.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Community Support</h3>
+                    <p>Join a community of like-minded individuals on the same fitness journey.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Classes Section -->
+    <section id="classes" class="our-classes">
+        <div class="container">
+            <h2>Our Classes</h2>
+            <div class="classes">
+                {% for class in featured_classes %}
+                <div class="class">
+                    {% if class.image %}
+                    
+                    {% else %}
+                    <img src="https://images.pexels.com/photos/116079/pexels-photo-116079.jpeg?" alt="{{ class.name }}">
+                    {% endif %}
+                    <h3>{{ class.name }}</h3>
+                    <p>{{ class.description|truncatewords:15 }}</p>
+                    
+                </div>
+                {% empty %}
+                <div class="class">
+                    <img src="https://images.pexels.com/photos/8436752/pexels-photo-8436752.jpeg?" alt="Yoga">
+                    <h3>Yoga</h3>
+                    <p>Improve flexibility, balance, and mental well-being with our yoga classes.</p>
+                   
+                </div>
+                <div class="class">
+                    <img src="https://images.pexels.com/photos/116079/pexels-photo-116079.jpeg?" alt="CrossFit">
+                    <h3>CrossFit</h3>
+                    <p>High-intensity functional movements to build strength and endurance.</p>
+                    
+                </div>
+                <div class="class">
+                    <img src="https://images.pexels.com/photos/1954524/pexels-photo-1954524.jpeg?" alt="Cardio">
+                  
+                    <p>Dance-based fitness program that's fun, energetic, and makes you feel amazing.</p>
+                    
+                </div>
+                {% endfor %}
+            </div>
+            <div class="classes-cta">
+                <a href="{% url 'classes' %}" class="btn btn-secondary">View All Classes</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Membership Plans Section -->
+    <style>
+        .plan {
+            width: 300px;
+            height: 400px;
+            perspective: 1000px;
+        }
+        .plan-front, .plan-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            transition: transform 0.6s ease;
+        }
+        .plan:hover .plan-front {
+            transform: rotateY(-180deg);
+        }
+        .plan:hover .plan-back {
+            transform: rotateY(0deg);
+        }
+    </style>
+    <section id="plans" class="our-plans">
+        <div class="container">
+            <h2>Membership Plans</h2>
+            <div class="plans">
+                {% for plan in plans %}
+                <div class="plan {% if plan.featured %}featured{% endif %}">
+                    <div class="plan-front">
+                        <h3>{{ plan.name }}</h3>
+                        <p class="price">₹{{ plan.price }}<span>/month</span></p>
+                        <div class="plan-button">
+                            <a href="{% url 'subscribe_plan' plan.id %}" class="btn btn-primary">Book Now</a>
+                        </div>
+                        {% if plan.featured %}<div class="plan-badge">Most Popular</div>{% endif %}
+                    </div>
+                    <div class="plan-back">
+                        <h3>{{ plan.name }} Features</h3>
+                        <ul>
+                            {% for feature in plan.features.all %}
+                            <li>{{ feature.feature }}</li>
+                            {% empty %}
+                            <li>No features listed</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="plan">
+                    <div class="plan-front">
+                        <h3>Basic</h3>
+                        <p class="price">₹999<span>/month</span></p>
+                        <div class="plan-button">
+                            <a href="{% url 'plans' %}" class="btn btn-primary">Book Now</a>
+                        </div>
+                    </div>
+                    <div class="plan-back">
+                        <h3>Basic Features</h3>
+                        <ul>
+                            <li>Access to gym equipment</li>
+                            <li>Basic fitness assessment</li>
+                            <li>2 group classes per week</li>
+                            <li>Locker access</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="plan featured">
+                    <div class="plan-front">
+                        <h3>Standard</h3>
+                        <p class="price">₹1,999<span>/month</span></p>
+                        <div class="plan-button">
+                            <a href="{% url 'plans' %}" class="btn btn-primary">Book Now</a>
+                        </div>
+                        <div class="plan-badge">Most Popular</div>
+                    </div>
+                    <div class="plan-back">
+                        <h3>Standard Features</h3>
+                        <ul>
+                            <li>Full access to gym equipment</li>
+                            <li>Comprehensive fitness assessment</li>
+                            <li>Unlimited group classes</li>
+                            <li>1 personal training session/month</li>
+                            <li>Nutrition consultation</li>
+                            <li>Locker and towel service</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="plan">
+                    <div class="plan-front">
+                        <h3>Premium</h3>
+                        <p class="price">₹3,999<span>/month</span></p>
+                        <div class="plan-button">
+                            <a href="{% url 'plans' %}" class="btn btn-primary">Book Now</a>
+                        </div>
+                    </div>
+                    <div class="plan-back">
+                        <h3>Premium Features</h3>
+                        <ul>
+                            <li>24/7 gym access</li>
+                            <li>Advanced fitness assessment</li>
+                            <li>互相 group classes</li>
+                            <li>4 personal training sessions/month</li>
+                            <li>Customized nutrition plan</li>
+                            <li>Locker and towel service</li>
+                            <li>Spa access</li>
+                        </ul>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="our-team">
+        <div class="container">
+            <h2>Our Team</h2>
+            <div class="team-slider">
+                <button class="nav-button prev"><i class="fas fa-chevron-left"></i></button>
+                <div class="team-member"></div>
+                <button class="nav-button next"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="team-cta">
+                <a href="{% url 'team' %}" class="btn btn-secondary">Meet Our Team</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Details Slider Section (New Section) -->
+    <section id="details-slider" class="details-slider">
+        <div class="container">
+            <h2>Explore GymWord Features</h2>
+            <div class="slider-container">
+                <button class="nav-button prev"><i class="fas fa-chevron-left"></i></button>
+                <div class="slider-content"></div>
+                <button class="nav-button next"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog">
+        <div class="container">
+            <h2>Our Blog</h2>
+            <div class="blog-grid">
+                {% for post in blog_posts %}
+                <div class="blog-post">
+                    {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="{{ post.title }}">
+                    {% else %}
+                    <img src="https://images.pexels.com/photos/6942027/pexels-photo-6942027.jpeg?auto=compress&cs=tinysrgb&w=600" alt="{{ post.title }}">
+                    {% endif %}
+                    <h3>{{ post.title }}</h3>
+                    <p class="meta">{{ post.created_at|date:"M d, Y" }} by {{ post.author.get_full_name }}</p>
+                    <p>{{ post.content|truncatewords:15 }}</p>
+                    <a href="{% url 'blog_detail' post.id %}" class="btn btn-secondary">Read More</a>
+                </div>
+                {% empty %}
+                <div class="blog-post">
+                    <img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?" alt="Nutrition Tips">
+                    <h3>5 Nutrition Tips for Better Workouts</h3>
+                    <p class="meta">Mar 15, 2023 by Fitness Expert</p>
+                    <p>Learn how proper nutrition can enhance your workout performance and recovery.</p>
+                    <a href="{% url 'blog' %}" class="btn btn-secondary">Read More</a>
+                </div>
+                <div class="blog-post">
+                    <img src="https://images.pexels.com/photos/8899511/pexels-photo-8899511.jpeg?" alt="Home Workouts">
+                    <h3>Effective Home Workouts with Minimal Equipment</h3>
+                    <p class="meta">Feb 28, 2023 by Fitness Expert</p>
+                    <p>Stay fit at home with these simple yet effective workout routines.</p>
+                    <a href="{% url 'blog' %}" class="btn btn-secondary">Read More</a>
+                </div>
+                <div class="blog-post">
+                    <img src="https://images.pexels.com/photos/289586/pexels-photo-289586.jpeg?" alt="Mindfulness">
+                    <h3>Mindfulness and Fitness: The Perfect Combination</h3>
+                    <p class="meta">Jan 20, 2023 by Fitness Expert</p>
+                    <p>Discover how mindfulness practices can enhance your fitness journey.</p>
+                    <a href="{% url 'blog' %}" class="btn btn-secondary">Read More</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="faq-section">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <h3 class="faq-question">
+                        What are your opening hours?
+                        <span class="faq-toggle">▼</span>
+                    </h3>
+                    <div class="faq-answer">
+                        Monday to Friday, 6 AM - 10 PM; Weekends 8 AM - 8 PM.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">
+                        Can I cancel my membership?
+                        <span class="faq-toggle">▼</span>
+                    </h3>
+                    <div class="faq-answer">
+                        Yes, with a 30-day notice.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">
+                        Do you offer personal training?
+                        <span class="faq-toggle">▼</span>
+                    </h3>
+                    <div class="faq-answer">
+                        Yes, included in Standard and Premium plans or available separately.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">
+                        How do I book a class?
+                        <span class="faq-toggle">▼</span>
+                    </h3>
+                    <div class="faq-answer">
+                        You can book classes through your account on our website or by visiting the gym reception.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">
+                        What should I bring to my first workout?
+                        <span class="faq-toggle">▼</span>
+                    </h3>
+                    <div class="faq-answer">
+                        Comfortable workout clothes, water bottle, towel, and a positive attitude!
+                    </div>
+                </div>
+            </div>
+            <div class="faq-cta">
+                <a href="{% url 'faq' %}" class="btn btn-secondary">View All FAQs</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+<section id="cta" class="cta-section">
+    <div class="container">
+        <h2>Ready to Start Your Fitness Journey?</h2>
+        <p>Join GymWord today and transform your life with our expert guidance and supportive community.</p>
+        <div class="cta-buttons">
+            <a href="{% url 'plans' %}" class="btn btn-primary">Join Now</a>
+            <a href="{% url 'contact' %}" class="btn btn-secondary">Contact Us</a>
+        </div>
+    </div>
+</section>
+
+<style>
+.cta-section {
+    
+    background-image: url('https://images.unsplash.com/photo-1540497077202-7c8a3999166f?'); 
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    min-height: 400px; 
+    width: 100%; 
+    position: relative; 
+    display: flex; 
+    align-items: center; 
+}
+
+
+.cta-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); 
+}
+
+
+.container {
+    position: relative;
+    
+    text-align: center; 
+}
+
+
+</style>
+{% endblock %}
+
+{% block extra_scripts %}
+<style>
+    /* Home Page Animation */
+    .title-page {
+        position: relative;
+        min-height: 500px;
+        background: url('https://images.pexels.com/photos/5327507/pexels-photo-5327507.jpeg?') no-repeat center center/cover;
+    }
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        animation: fadePulse 5s infinite;
+    }
+    .title-content {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        padding: 100px 20px;
+        color: white;
+    }
+
+    /* FAQ Styles */
+    .faq-container {
+        max-width: 800px;
+        margin: 20px auto;
+    }
+    .faq-item {
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    .faq-question {
+        cursor: pointer;
+        padding: 15px;
+        margin: 0;
+        background-color: #f5f5f5;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background-color 0.3s;
+    }
+    .faq-question:hover {
+        background-color: #e0e0e0;
+    }
+    .faq-answer {
+        display: none;
+        padding: 15px;
+        background-color: #fff;
+        border-top: 1px solid #ddd;
+    }
+    .faq-toggle {
+        font-size: 16px;
+        transition: transform 0.3s;
+    }
+    .faq-item.active .faq-toggle {
+        transform: rotate(180deg);
+    }
+    .faq-item.active .faq-answer {
+        display: block;
+    }
+
+    /* About Us Styles */
+    .about-us {
+        padding: 60px 0;
+    }
+    .about-content {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+    }
+    .about-text {
+        flex: 1;
+        min-width: 300px;
+        text-align: left;
+    }
+    .about-image {
+        flex: 1;
+        min-width: 300px;
+        text-align: center;
+    }
+    .about-image img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+    }
+    .about-cta {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    /* Membership Plans Styles */
+    .our-plans {
+        padding: 60px 0;
+        background-color: #fff;
+    }
+    .plans {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .plan {
+        width: 300px;
+        height: 400px;
+        position: relative;
+        perspective: 1000px;
+        border: 2px solid #ff0000;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .plan-front, .plan-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        transition: transform 0.6s ease;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: white;
+    }
+    .plan-front {
+        z-index: 2;
+        transform: rotateY(0deg);
+    }
+    .plan-back {
+        transform: rotateY(180deg);
+        background: #fff0f0;
+    }
+    .plan:hover .plan-front {
+        transform: rotateY(-180deg);
+    }
+    .plan:hover .plan-back {
+        transform: rotateY(0deg);
+    }
+    .plan.featured {
+        background: #ff0000;
+        color: white;
+    }
+    .plan.featured .plan-front {
+        background: #ff0000;
+    }
+    .plan.featured .plan-back {
+        background: #ffe6e6;
+    }
+    .plan-badge {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: white;
+        color: #ff0000;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: bold;
+        border: 2px solid #ff0000;
+        animation: pulse 2s infinite;
+    }
+    .plan h3 {
+        margin: 0 0 15px;
+        color: #ff0000;
+        font-size: 24px;
+    }
+    .plan.featured h3 {
+        color: white;
+    }
+    .plan .price {
+        font-size: 32px;
+        color: #ff0000;
+        margin: 0 0 20px;
+        font-weight: bold;
+    }
+    .plan.featured .price {
+        color: white;
+    }
+    .plan .price span {
+        font-size: 16px;
+        color: #666;
+    }
+    .plan.featured .price span {
+        color: #ddd;
+    }
+    .plan ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        text-align: left;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+    .plan ul li {
+        padding: 5px 0;
+        color: #333;
+    }
+    .plan.featured ul li {
+        color: #ff0000;
+    }
+    .plan-button {
+        margin-top: 20px;
+    }
+    .plan .btn {
+        padding: 12px 30px;
+        background: #ff0000;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        border: 2px solid white;
+    }
+    .plan.featured .btn {
+        background: white;
+        color: #ff0000;
+        border: 2px solid #ff0000;
+    }
+    .plan .btn:hover {
+        background: white;
+        color: #ff0000;
+        transform: scale(1.1);
+    }
+    .plan.featured .btn:hover {
+        background: #ff0000;
+        color: white;
+    }
+
+    /* Details Slider Styles */
+    .details-slider {
+        padding: 60px 0;
+        background-color: #f9f9f9;
+    }
+    .slider-container {
+        position: relative;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .slider-content {
+        text-align: center;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .slider-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+    }
+    .nav-button {
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        font-size: 24px;
+        color: #333;
+    }
+    .nav-button.prev {
+        left: -40px;
+    }
+    .nav-button.next {
+        right: -40px;
+    }
+
+    /* Animation Keyframes */
+    @keyframes fadePulse {
+        0% { opacity: 0.4; }
+        50% { opacity: 0.6; }
+        100% { opacity: 0.4; }
+    }
+    @keyframes pulse {
+        0% { transform: translateX(-50%) scale(1); }
+        50% { transform: translateX(-50%) scale(1.1); }
+        100% { transform: translateX(-50%) scale(1); }
+    }
+
+    /* Other Styles */
+    .taglines span {
+        display: none;
+    }
+    .taglines span.active {
+        display: inline;
+    }
+    .team-slider {
+        position: relative;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // FAQ Accordion
+    try {
+        const faqItems = document.querySelectorAll('.faq-item');
+        if (faqItems.length === 0) {
+            console.warn('No FAQ items found on the page');
+            return;
+        }
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            const answer = item.querySelector('.faq-answer');
+            const toggle = item.querySelector('.faq-toggle');
+            if (!question || !answer || !toggle) {
+                console.error('FAQ item missing required elements:', item);
+                return;
+            }
+            question.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                item.classList.toggle('active');
+                answer.style.display = isActive ? 'none' : 'block';
+                toggle.textContent = isActive ? '▼' : '▲';
+                console.log('FAQ toggled:', question.textContent.trim(), 'Active:', !isActive);
+            });
+        });
+    } catch (error) {
+        console.error('Error initializing FAQ accordion:', error);
+    }
+    
+    // Team Slider
+    try {
+        const teamMember = document.querySelector('.team-member');
+        const prevButton = document.querySelector('.team-slider .nav-button.prev');
+        const nextButton = document.querySelector('.team-slider .nav-button.next');
+        if (teamMember && prevButton && nextButton) {
+            const teamMembers = [
+                {% for member in team_members %}
+                {
+                    name: "{{ member.name|escapejs }}",
+                    position: "{{ member.position|escapejs }}",
+                    bio: "{{ member.bio|escapejs }}",
+                    image: "{% if member.image %}{{ member.image.url|escapejs }}{% else %}https://source.unsplash.com/400x400/?trainer{% endif %}"
+                }{% if not forloop.last %},{% endif %}
+                {% empty %}
+                {
+                    name: "John Doe",
+                    position: "Head Trainer",
+                    bio: "With over 10 years of experience, John specializes in strength training and functional fitness.",
+                    image: "trainer,male"
+                },
+                {
+                    name: "Jane Smith",
+                    position: "Yoga Instructor",
+                    bio: "Jane is a certified yoga instructor with expertise in Hatha and Vinyasa yoga.",
+                    image: "https://media.istockphoto.com/id/852401732/photo/happy-personal-trainer-working-at-the-gym.webp?"
+                },
+                {
+                    name: "Mike Johnson",
+                    position: "Nutrition Specialist",
+                    bio: "Mike helps clients optimize their diet for better performance and results.",
+                    image: "https://source.unsplash.com/400x400/?nutritionist"
+                }
+                {% endfor %}
+            ];
+            let currentIndex = 0;
+            function updateTeamMember() {
+                const member = teamMembers[currentIndex];
+                teamMember.innerHTML = `
+                    <img src="${member.image}" alt="${member.name}">
+                    <h3>${member.name}</h3>
+                    <p class="position">${member.position}</p>
+                    <p class="bio">${member.bio}</p>
+                `;
+            }
+            prevButton.addEventListener('click', () => {
+                currentIndex = (currentIndex - 1 + teamMembers.length) % teamMembers.length;
+                updateTeamMember();
+            });
+            nextButton.addEventListener('click', () => {
+                currentIndex = (currentIndex + 1) % teamMembers.length;
+                updateTeamMember();
+            });
+            updateTeamMember();
+        }
+    } catch (error) {
+        console.error('Error initializing team slider:', error);
+    }
+    
+    // Details Slider
+    try {
+        const sliderContent = document.querySelector('.slider-content');
+        const prevSlideButton = document.querySelector('.slider-container .nav-button.prev');
+        const nextSlideButton = document.querySelector('.slider-container .nav-button.next');
+        if (sliderContent && prevSlideButton && nextSlideButton) {
+            const slides = [
+                {
+                    title: "Advanced Training Programs",
+                    description: "Our expert trainers design personalized programs to help you achieve your goals, whether it's strength, endurance, or flexibility.",
+                    image: "https://images.pexels.com/photos/3912953/pexels-photo-3912953.jpeg?"
+                },
+                {
+                    title: "Nutrition Guidance",
+                    description: "Get tailored nutrition plans from our certified specialists to complement your fitness journey and maximize results.",
+                    image: "https://images.pexels.com/photos/7653089/pexels-photo-7653089.jpeg?"
+                },
+                {
+                    title: "Community Events",
+                    description: "Join our regular fitness challenges, workshops, and social events to stay motivated and connect with others.",
+                    image: "https://images.pexels.com/photos/30607293/pexels-photo-30607293/free-photo-of-modern-wooden-building-with-event-space-exterior.jpeg?"
+                }
+            ];
+            let slideIndex = 0;
+            function updateSlide() {
+                const slide = slides[slideIndex];
+                sliderContent.innerHTML = `
+                    <img src="${slide.image}" alt="${slide.title}">
+                    <h3>${slide.title}</h3>
+                    <p>${slide.description}</p>
+                `;
+            }
+            prevSlideButton.addEventListener('click', () => {
+                slideIndex = (slideIndex - 1 + slides.length) % slides.length;
+                updateSlide();
+            });
+            nextSlideButton.addEventListener('click', () => {
+                slideIndex = (slideIndex + 1) % slides.length;
+                updateSlide();
+            });
+            updateSlide();
+        }
+    } catch (error) {
+        console.error('Error initializing details slider:', error);
+    }
+    
+    // Tagline Rotation
+    try {
+        const taglines = document.querySelectorAll('.taglines span');
+        let taglineIndex = 0;
+        if (taglines.length > 0) {
+            setInterval(() => {
+                taglines.forEach((tagline, index) => {
+                    tagline.classList.toggle('active', index === taglineIndex);
+                });
+                taglineIndex = (taglineIndex + 1) % taglines.length;
+            }, 3000);
+            taglines[0].classList.add('active');
+        }
+    } catch (error) {
+        console.error('Error initializing tagline rotation:', error);
+    }
+});
+</script>
+{% endblock %}

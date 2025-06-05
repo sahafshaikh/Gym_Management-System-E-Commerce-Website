@@ -1,0 +1,446 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }} - GymWord Store{% endblock %}
+
+{% block content %}
+<style>
+    :root {
+        --primary-color: #d32f2f;    /* Deep Red */
+        --secondary-color: #ffffff;   /* White */
+        --accent-color: #f44336;     /* Bright Red for highlights */
+        --background-color: #fff5f5; /* Very light red tint */
+        --text-color: #333;
+        --shadow-color: rgba(211, 47, 47, 0.2);
+        --transition: all 0.3s ease;
+    }
+
+    .product-detail-section {
+        margin: 100px 0;
+        padding: 50px 0;
+        background: var(--background-color);
+        border-top: 4px solid var(--primary-color);
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .product-detail {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        align-items: start;
+        background: var(--secondary-color);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px var(--shadow-color);
+    }
+
+    /* Enhanced Image Styles */
+    .product-images {
+        position: relative;
+        padding: 20px;
+        background: var(--secondary-color);
+        border-radius: 15px;
+        border: 2px solid var(--primary-color);
+        transition: var(--transition);
+    }
+
+    .product-images:hover {
+        transform: translateY(-5px);
+        border-color: var(--accent-color);
+    }
+
+    .product-main-image {
+        width: 100%;
+        max-width: 500px;
+        max-height: 450px;
+        object-fit: contain;
+        border-radius: 10px;
+        transition: transform 0.5s ease;
+        border: 1px solid #eee;
+    }
+
+    .product-images:hover .product-main-image {
+        transform: scale(1.03);
+    }
+
+    /* Product Info Styles */
+    .product-info {
+        padding: 20px;
+        background: var(--secondary-color);
+        border-radius: 15px;
+        border: 2px dashed var(--primary-color);
+    }
+
+    .product-info h2 {
+        color: var(--primary-color);
+        font-size: 36px;
+        margin-bottom: 15px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .price {
+        font-size: 30px;
+        font-weight: 700;
+        color: var(--accent-color);
+        margin: 15px 0;
+        background: rgba(244, 67, 54, 0.1);
+        padding: 8px 15px;
+        border-radius: 10px;
+        display: inline-block;
+    }
+
+    .stock, .rating {
+        font-size: 16px;
+        color: #666;
+        margin: 10px 0;
+        font-style: italic;
+    }
+
+    .description {
+        color: var(--text-color);
+        line-height: 1.8;
+        margin: 20px 0;
+        font-size: 16px;
+    }
+
+    .product-actions {
+        margin-top: 25px;
+    }
+
+    .btn {
+        padding: 14px 30px;
+        border-radius: 30px;
+        text-decoration: none;
+        display: inline-block;
+        transition: var(--transition);
+        font-weight: 700;
+        cursor: pointer;
+        border: 2px solid var(--primary-color);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .btn-primary {
+        background: var(--primary-color);
+        color: var(--secondary-color);
+    }
+
+    .btn-primary:hover:not(.disabled) {
+        background: var(--accent-color);
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px var(--shadow-color);
+    }
+
+    .btn-primary.disabled {
+        background: #ccc;
+        border-color: #ccc;
+        cursor: not-allowed;
+        color: #666;
+    }
+
+    /* Reviews Section */
+    .product-reviews {
+        margin-top: 40px;
+        padding: 30px;
+        background: var(--secondary-color);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px var(--shadow-color);
+        border-left: 5px solid var(--primary-color);
+    }
+
+    .product-reviews h3 {
+        color: var(--primary-color);
+        font-size: 26px;
+        margin-bottom: 25px;
+        font-weight: 700;
+    }
+
+    .review {
+        border-bottom: 2px dotted var(--primary-color);
+        padding: 20px 0;
+        transition: var(--transition);
+    }
+
+    .review:hover {
+        background: rgba(211, 47, 47, 0.05);
+    }
+
+    .review-author {
+        font-weight: 700;
+        color: var(--primary-color);
+        font-size: 18px;
+    }
+
+    .review-date {
+        font-size: 14px;
+        color: #888;
+    }
+
+    .review-content {
+        margin-top: 12px;
+        line-height: 1.6;
+        color: var(--text-color);
+    }
+
+    /* Related Products */
+    .related-products {
+        margin-top: 40px;
+    }
+
+    .related-products h3 {
+        color: var(--primary-color);
+        font-size: 26px;
+        margin-bottom: 25px;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 30px;
+    }
+
+    .product-card {
+        background: var(--secondary-color);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px var(--shadow-color);
+        transition: var(--transition);
+        position: relative;
+        border: 2px solid var(--primary-color);
+    }
+
+    .product-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px var(--shadow-color);
+        border-color: var(--accent-color);
+    }
+
+    .product-card img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .product-card:hover img {
+        transform: scale(1.08);
+    }
+
+    .product-card h3 {
+        padding: 15px;
+        color: var(--primary-color);
+        font-size: 20px;
+        margin: 0;
+        font-weight: 600;
+    }
+
+    .product-card .price {
+        padding: 0 15px 15px;
+        font-size: 22px;
+        background: none;
+    }
+
+    .product-card .btn {
+        margin: 0 15px 15px;
+        width: calc(100% - 30px);
+        background: var(--secondary-color);
+        color: var(--primary-color);
+    }
+
+    .product-card .btn:hover {
+        background: var(--primary-color);
+        color: var(--secondary-color);
+    }
+
+    .quick-view {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: var(--primary-color);
+        color: var(--secondary-color);
+        padding: 12px 25px;
+        border-radius: 25px;
+        opacity: 0;
+        transition: var(--transition);
+        cursor: pointer;
+        font-weight: 700;
+        border: 2px solid var(--secondary-color);
+    }
+
+    .product-card:hover .quick-view {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    /* Quick View Modal */
+    .quick-view-modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(211, 47, 47, 0.6);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .quick-view-content {
+        background: var(--secondary-color);
+        padding: 35px;
+        border-radius: 20px;
+        max-width: 600px;
+        width: 90%;
+        position: relative;
+        box-shadow: 0 15px 40px var(--shadow-color);
+        animation: modalFadeIn 0.4s ease;
+        border: 3px solid var(--primary-color);
+    }
+
+    @keyframes modalFadeIn {
+        from { transform: scale(0.8); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    .quick-view-image {
+        width: 100%;
+        max-height: 450px;
+        object-fit: contain;
+        border-radius: 15px;
+        border: 2px solid var(--primary-color);
+    }
+
+    .close-modal {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 35px;
+        cursor: pointer;
+        color: var(--primary-color);
+        background: var(--secondary-color);
+        border: 2px solid var(--primary-color);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        line-height: 35px;
+        text-align: center;
+        transition: var(--transition);
+    }
+
+    .close-modal:hover {
+        color: var(--secondary-color);
+        background: var(--accent-color);
+        transform: rotate(180deg);
+    }
+</style>
+
+<section class="product-detail-section">
+    <div class="container">
+        <div class="product-detail">
+            <div class="product-images">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-main-image">
+                {% else %}
+                <img src="https://source.unsplash.com/800x600/?product" alt="{{ product.name }}" class="product-main-image">
+                {% endif %}
+            </div>
+            
+            <div class="product-info">
+                <h2>{{ product.name }}</h2>
+                <p class="price">₹{{ product.price }}</p>
+                <p class="stock">Stock: {{ product.stock }}</p>
+                <p class="rating">Rating: {{ product.rating }}/5</p>
+                <p class="description">{{ product.description }}</p>
+                
+                <div class="product-actions">
+                    <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary {% if product.stock <= 0 %}disabled{% endif %}">
+                        {% if product.stock > 0 %}Add to Cart{% else %}Out of Stock{% endif %}
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="product-reviews">
+            <h3>Reviews</h3>
+            {% if product.reviews.all %}
+            <div class="reviews-list">
+                {% for review in product.reviews.all %}
+                <div class="review">
+                    <p class="review-author">{{ review.user.get_full_name }} - {{ review.rating }}/5</p>
+                    <p class="review-date">{{ review.created_at|date:"F d, Y" }}</p>
+                    <p class="review-content">{{ review.review }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p>No reviews yet.</p>
+            {% endif %}
+        </div>
+        
+        <div class="related-products">
+            <h3>Related Products</h3>
+            <div class="product-grid">
+                {% for related in related_products %}
+                <div class="product-card">
+                    {% if related.image %}
+                    <img src="{{ related.image.url }}" alt="{{ related.name }}">
+                    <span class="quick-view" data-image="{{ related.image.url }}">Quick View</span>
+                    {% else %}
+                    <img src="https://source.unsplash.com/400x400/?product" alt="{{ related.name }}">
+                    <span class="quick-view" data-image="https://source.unsplash.com/400x400/?product">Quick View</span>
+                    {% endif %}
+                    <h3>{{ related.name }}</h3>
+                    <p class="price">₹{{ related.price }}</p>
+                    <a href="{% url 'product_detail' related.id %}" class="btn btn-primary">View Details</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick View Modal -->
+<div id="quickViewModal" class="quick-view-modal">
+    <div class="quick-view-content">
+        <button class="close-modal">×</button>
+        <img id="quickViewImage" class="quick-view-image" src="" alt="Quick view">
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const quickViewButtons = document.querySelectorAll('.quick-view');
+        const modal = document.getElementById('quickViewModal');
+        const modalImage = document.getElementById('quickViewImage');
+        const closeBtn = document.querySelector('.close-modal');
+
+        quickViewButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const imageUrl = this.getAttribute('data-image');
+                modalImage.src = imageUrl;
+                modal.style.display = 'flex';
+            });
+        });
+
+        closeBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,284 @@
+{% extends 'base.html' %}
+
+{% block title %}Store - GymWord{% endblock %}
+
+{% block content %}
+<style>
+    .store-section {
+        margin: 80px 0;
+        padding: 60px 0;
+        background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Background Effects */
+    .store-bg-effects {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.05;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800"><defs><filter id="f"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" /></filter></defs><rect width="800" height="800" filter="url(#f)" /></svg>');
+        animation: noise 5s infinite;
+    }
+
+    @keyframes noise {
+        0% { transform: translate(0, 0); }
+        50% { transform: translate(20px, 20px); }
+        100% { transform: translate(0, 0); }
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Header Styling */
+    .store-header {
+        text-align: center;
+        margin-bottom: 50px;
+        color: #333;
+    }
+
+    .store-header h2 {
+        font-size: 3rem;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: #ff0000;
+    }
+
+    .store-header p {
+        color: #666;
+        font-size: 1.1rem;
+    }
+
+    /* Category Filter */
+    .category-filter {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin: 0 0 40px;
+        flex-wrap: wrap;
+        padding: 0 15px;
+    }
+
+    .btn {
+        padding: 12px 30px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        background: #ffffff;
+    }
+
+    .btn-primary {
+        background: #ff0000;
+        color: #ffffff;
+    }
+
+    .btn-primary:hover {
+        background: #cc0000;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+    }
+
+    .btn-secondary {
+        color: #ff0000;
+        border: 2px solid #ff0000;
+    }
+
+    .btn-secondary:hover {
+        background: #ff0000;
+        color: #ffffff;
+        transform: translateY(-3px);
+    }
+
+    /* Product Grid */
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+        padding: 0 15px;
+    }
+
+    .product-card {
+        background: #ffffff;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        border: 1px solid rgba(255, 0, 0, 0.1);
+    }
+
+    .product-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+
+    .product-card img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+
+    .product-card:hover img {
+        transform: scale(1.1);
+    }
+
+    .product-card-content {
+        padding: 25px;
+        color: #333;
+    }
+
+    .product-card h3 {
+        font-size: 1.3rem;
+        margin: 0 0 15px;
+        color: #333;
+    }
+
+    .price {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #ff0000;
+        margin: 0 0 10px;
+    }
+
+    .stock-info {
+        color: #666;
+        font-size: 0.95rem;
+        margin: 0 0 10px;
+    }
+
+    .rating {
+        margin: 0 0 20px;
+        font-size: 1rem;
+    }
+
+    .rating .stars {
+        color: #ff9900;
+    }
+
+    .card-buttons {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .deal-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: #ff0000;
+        color: #ffffff;
+        padding: 5px 10px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        z-index: 2;
+    }
+
+    .disabled {
+        background: #cccccc !important;
+        color: #666666;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .product-grid {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+        
+        .store-header h2 {
+            font-size: 2rem;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+        }
+    }
+</style>
+
+<section class="store-section">
+    <div class="store-bg-effects"></div>
+    <div class="container">
+        <div class="store-header">
+            <h2>Fitness Store</h2>
+            <p>Power Up Your Workout with Premium Gear</p>
+        </div>
+        
+        <div class="category-filter">
+            <a href="{% url 'store' %}" 
+               class="btn {% if selected_category == 'All' %}btn-primary{% else %}btn-secondary{% endif %}">
+                All
+            </a>
+            {% for category in categories %}
+            <a href="{% url 'store' %}?category={{ category.name }}" 
+               class="btn {% if selected_category == category.name %}btn-primary{% else %}btn-secondary{% endif %}">
+                {{ category.name }}
+            </a>
+            {% endfor %}
+        </div>
+        
+        <div class="product-grid">
+            {% for product in products %}
+            <div class="product-card">
+                {% if product.discount and product.discount > 0 %}
+                <span class="deal-badge">{{ product.discount }}% OFF</span>
+                {% endif %}
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                {% else %}
+                <img src="https://source.unsplash.com/400x400/?fitness,equipment" alt="{{ product.name }}">
+                {% endif %}
+                <div class="product-card-content">
+                    <h3>{{ product.name }}</h3>
+                    <p class="price">₹{{ product.price }}</p>
+                    <p class="stock-info">
+                        {% if product.stock > 0 %}
+                            In Stock: {{ product.stock }} units
+                        {% else %}
+                            Out of Stock
+                        {% endif %}
+                    </p>
+                    <p class="rating">
+                        <span class="stars">★★★★★</span> 
+                        {{ product.rating }}/5
+                    </p>
+                    <div class="card-buttons">
+                        <a href="{% url 'product_detail' product.id %}" 
+                           class="btn btn-primary">
+                            Quick View
+                        </a>
+                        <a href="{% url 'add_to_cart' product.id %}" 
+                           class="btn btn-primary {% if product.stock <= 0 %}disabled{% endif %}">
+                            {% if product.stock > 0 %}
+                                Add to Cart
+                            {% else %}
+                                Sold Out
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div style="text-align: center; padding: 60px; width: 100%; color: #333;">
+                <p style="font-size: 1.3rem;">No products found in this category.</p>
+                <p style="color: #666;">Check back soon for new arrivals!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

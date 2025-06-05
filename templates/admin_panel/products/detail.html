@@ -1,0 +1,116 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Product Details - GymWord Admin{% endblock %}
+
+{% block page_title %}Product Details{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Product: {{ product.name }}</h1>
+        <div>
+            <a href="{% url 'admin_product_edit' product.id %}" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+            <a href="{% url 'admin_product_list' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Products
+            </a>
+        </div>
+    </div>
+
+    <!-- Product Details -->
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Product Information</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>ID:</strong> {{ product.id }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Name:</strong> {{ product.name }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Category:</strong> {{ product.category.name }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Price:</strong> ₹{{ product.price }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Stock:</strong> {{ product.stock }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Rating:</strong> {{ product.rating }}/5
+                    </div>
+                    <div class="mb-3">
+                        <strong>Created:</strong> {{ product.created_at|date:"F d, Y" }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Last Updated:</strong> {{ product.updated_at|date:"F d, Y" }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Description:</strong>
+                        <p>{{ product.description }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Product Image</h6>
+                </div>
+                <div class="card-body text-center">
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid" style="max-height: 300px;">
+                    {% else %}
+                    <div class="alert alert-info">No image available for this product.</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Reviews -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Product Reviews</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>User</th>
+                            <th>Rating</th>
+                            <th>Review</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for review in reviews %}
+                        <tr>
+                            <td>{{ review.id }}</td>
+                            <td>{{ review.user.username }}</td>
+                            <td>{{ review.rating }}/5</td>
+                            <td>{{ review.review }}</td>
+                            <td>{{ review.created_at|date:"M d, Y" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">No reviews found for this product.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

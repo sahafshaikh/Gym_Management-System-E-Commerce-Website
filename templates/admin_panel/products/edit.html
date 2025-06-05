@@ -1,0 +1,119 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Edit Product - GymWord Admin{% endblock %}
+
+{% block page_title %}Edit Product{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Edit Product: {{ product.name }}</h1>
+        <a href="{% url 'admin_product_list' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Products
+        </a>
+    </div>
+
+    <!-- Edit Product Form -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Product Information</h6>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="name" class="form-label">Product Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ product.name }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="category" class="form-label">Category</label>
+                        <select class="form-select" id="category" name="category" required>
+                            <option value="">Select Category</option>
+                            {% for category in categories %}
+                            <option value="{{ category.id }}" {% if product.category.id == category.id %}selected{% endif %}>{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="price" class="form-label">Price (₹)</label>
+                        <input type="number" class="form-control" id="price" name="price" step="0.01" min="0" value="{{ product.price }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="stock" class="form-label">Stock</label>
+                        <input type="number" class="form-control" id="stock" name="stock" min="0" value="{{ product.stock }}" required>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="4" required>{{ product.description }}</textarea>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="rating" class="form-label">Rating (0-5)</label>
+                        <input type="number" class="form-control" id="rating" name="rating" step="0.1" min="0" max="5" value="{{ product.rating }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="image" class="form-label">Product Image</label>
+                        <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                        <small class="form-text text-muted">Leave empty to keep current image</small>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <div id="imagePreviewContainer">
+                        <label class="form-label">Current Image</label>
+                        <div>
+                            {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                            {% else %}
+                            <div class="alert alert-info">No image available</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">Update Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Image preview for new uploads
+        const imageInput = document.getElementById('image');
+        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+        
+        imageInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    // Replace current image preview with new one
+                    imagePreviewContainer.innerHTML = `
+                        <label class="form-label">New Image Preview</label>
+                        <div>
+                            <img src="${e.target.result}" alt="Product Image Preview" class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                        </div>
+                    `;
+                }
+                
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    });
+</script>
+{% endblock %}
+

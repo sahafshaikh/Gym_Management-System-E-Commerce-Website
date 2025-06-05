@@ -1,0 +1,316 @@
+{% extends 'base.html' %}
+
+{% block title %}Our Team - GymWord{% endblock %}
+
+{% block content %}
+<style>
+    :root {
+        --primary-red: #d32f2f;
+        --secondary-red: #f44336;
+        --white: #ffffff;
+        --light-bg: #fff5f5;
+        --text-dark: #333;
+        --shadow-red: rgba(211, 47, 47, 0.25);
+        --accent-gray: #f8f9fa;
+        --transition: all 0.3s ease;
+    }
+
+    /* Team Section Styling */
+    .team-section {
+        padding: 6rem 0;
+        background: var(--light-bg);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .team-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 6px;
+        background: linear-gradient(90deg, var(--primary-red), var(--secondary-red));
+    }
+
+    .team-section h2 {
+        text-align: center;
+        color: var(--primary-red);
+        margin-bottom: 4rem;
+        font-size: 3.5rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        position: relative;
+        display: inline-block;
+        background: var(--white);
+        padding: 0 20px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px var(--shadow-red);
+    }
+
+    .team-section h2::after {
+        content: '';
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: var(--secondary-red);
+        border-radius: 2px;
+    }
+
+    .team-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 2.5rem;
+    }
+
+    .team-members-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 3rem;
+        transition: transform 0.5s ease;
+    }
+
+    .team-member-card {
+        background: var(--white);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px var(--shadow-red);
+        padding: 2.5rem;
+        text-align: center;
+        transition: var(--transition);
+        border: 3px solid var(--primary-red);
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, var(--white) 0%, var(--accent-gray) 100%);
+    }
+
+    .team-member-card:hover {
+        transform: translateY(-15px) scale(1.02);
+        box-shadow: 0 20px 45px var(--shadow-red);
+        border-color: var(--secondary-red);
+    }
+
+    .team-member-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(244, 67, 54, 0.15) 0%, transparent 70%);
+        transition: transform 0.6s ease;
+        z-index: 0;
+    }
+
+    .team-member-card:hover::before {
+        transform: scale(1.3);
+    }
+
+    .team-member-card > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    .team-member-card img {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 2rem;
+        border: 5px solid var(--primary-red);
+        transition: var(--transition);
+        box-shadow: 0 5px 15px var(--shadow-red);
+    }
+
+    .team-member-card:hover img {
+        border-color: var(--secondary-red);
+        transform: rotate(5deg) scale(1.08);
+    }
+
+    .team-member-card h3 {
+        color: var(--primary-red);
+        margin-bottom: 0.75rem;
+        font-size: 2rem;
+        font-weight: 800;
+        text-transform: capitalize;
+    }
+
+    .team-member-card .position {
+        color: var(--secondary-red);
+        font-style: italic;
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+
+    .team-member-card .bio {
+        color: var(--text-dark);
+        font-size: 1.1rem;
+        line-height: 1.7;
+        margin-bottom: 1.5rem;
+    }
+
+    .team-member-card .experience {
+        color: #666;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        font-style: italic;
+        background: rgba(244, 67, 54, 0.1);
+        padding: 5px 15px;
+        border-radius: 20px;
+        display: inline-block;
+    }
+
+    .team-member-card .specialization {
+        color: var(--primary-red);
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .team-member-card .quote {
+        color: #888;
+        font-size: 0.95rem;
+        font-style: italic;
+        margin-bottom: 1.5rem;
+        padding: 10px;
+        border-left: 4px solid var(--secondary-red);
+        background: rgba(244, 67, 54, 0.05);
+    }
+
+    .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 1.2rem;
+        margin-top: 1.5rem;
+    }
+
+    .social-links a {
+        width: 45px;
+        height: 45px;
+        background: var(--primary-red);
+        color: var(--white);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 1.3rem;
+        transition: var(--transition);
+        border: 2px solid var(--white);
+    }
+
+    .social-links a:hover {
+        background: var(--secondary-red);
+        transform: scale(1.15) rotate(360deg);
+        box-shadow: 0 5px 15px var(--shadow-red);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+        .team-members-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .team-members-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .team-section {
+            padding: 4rem 0;
+        }
+        
+        .team-container {
+            padding: 0 2rem;
+        }
+        
+        .team-section h2 {
+            font-size: 2.8rem;
+        }
+        
+        .team-member-card {
+            padding: 2rem;
+        }
+        
+        .team-member-card img {
+            width: 150px;
+            height: 150px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .team-section h2 {
+            font-size: 2.2rem;
+        }
+        
+        .team-container {
+            padding: 0 1rem;
+        }
+    }
+</style>
+
+<section class="team-section">
+    <div class="team-container">
+        <h2>Our Team</h2>
+        
+        <div class="team-members-grid">
+            {% for member in team_members %}
+            <div class="team-member-card">
+                {% if member.image %}
+                <img src="{{ member.image.url }}" alt="{{ member.name }}">
+                {% else %}
+                <img src="https://source.unsplash.com/400x400/?portrait" alt="{{ member.name }}">
+                {% endif %}
+                <h3>{{ member.name }}</h3>
+                <p class="position">{{ member.position }}</p>
+                <p class="bio">{{ member.bio }}</p>
+                <p class="experience">
+                    Experience: {{ member.experience_years|default:"5" }} years
+                </p>
+                <p class="specialization">
+                    Specialization: {{ member.specialization|default:"Fitness Training" }}
+                </p>
+                <p class="quote">
+                    "{{ member.quote|default:"Empowering others is my passion." }}"
+                </p>
+                <div class="social-links">
+                    {% if member.twitter %}
+                    <a href="{{ member.twitter }}" target="_blank" title="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    {% endif %}
+                    {% if member.linkedin %}
+                    <a href="{{ member.linkedin }}" target="_blank" title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    {% endif %}
+                    {% if member.instagram %}
+                    <a href="{{ member.instagram }}" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    {% endif %}
+                    {% if member.email %}
+                    <a href="mailto:{{ member.email }}" title="Email">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <p>No team members found.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% block extra_js %}
+<!-- Include Font Awesome for icons (replace with your kit ID) -->
+<script src="https://kit.fontawesome.com/your-kit-id.js" crossorigin="anonymous"></script>
+{% endblock %}
+{% endblock %}

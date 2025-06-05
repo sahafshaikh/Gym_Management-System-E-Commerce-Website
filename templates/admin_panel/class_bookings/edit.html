@@ -1,0 +1,68 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Edit Class Booking - GymWord Admin{% endblock %}
+
+{% block page_title %}Edit Class Booking{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Edit Booking #{{ booking.id }}</h1>
+        <a href="{% url 'admin_class_booking_list' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Bookings
+        </a>
+    </div>
+
+    <!-- Edit Class Booking Form -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Booking Information</h6>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="user" class="form-label">User</label>
+                    <select class="form-select" id="user" name="user" required>
+                        <option value="">Select User</option>
+                        {% for user in users %}
+                        <option value="{{ user.id }}" {% if booking.user.id == user.id %}selected{% endif %}>{{ user.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="class_schedule" class="form-label">Class Schedule</label>
+                    <select class="form-select" id="class_schedule" name="class_schedule" required>
+                        <option value="">Select Class Schedule</option>
+                        {% for schedule in class_schedules %}
+                        <option value="{{ schedule.id }}" {% if booking.class_schedule.id == schedule.id %}selected{% endif %}>{{ schedule.gym_class.name }} - {{ schedule.day }} at {{ schedule.time }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="booking_date" class="form-label">Booking Date</label>
+                    <input type="date" class="form-control" id="booking_date" name="booking_date" value="{{ booking.booking_date|date:'Y-m-d' }}" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-select" id="status" name="status" required>
+                        <option value="Booked" {% if booking.status == 'Booked' %}selected{% endif %}>Booked</option>
+                        <option value="Cancelled" {% if booking.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                        <option value="Completed" {% if booking.status == 'Completed' %}selected{% endif %}>Completed</option>
+                    </select>
+                </div>
+                
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">Update Booking</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

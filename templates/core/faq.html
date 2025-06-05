@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% block title %}FAQ - GymWord{% endblock %}
+
+{% block content %}
+<section class="faq-section">
+    <div class="container">
+        <h2>Frequently Asked Questions</h2>
+        
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question">What are your opening hours? <span class="toggle-arrow">▼</span></div>
+                <div class="faq-answer">Monday to Friday, 6 AM - 10 PM; Weekends 8 AM - 8 PM.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Can I cancel my membership? <span class="toggle-arrow">▼</span></div>
+                <div class="faq-answer">Yes, with a 30-day notice.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Do you offer personal training? <span class="toggle-arrow">▼</span></div>
+                <div class="faq-answer">Yes, included in Standard and Premium plans or available separately.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">How do I book a class? <span class="toggle-arrow">▼</span></div>
+                <div class="faq-answer">You can book classes through your account on our website or by visiting the gym reception.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">What should I bring to my first workout? <span class="toggle-arrow">▼</span></div>
+                <div class="faq-answer">Comfortable workout clothes, water bottle, towel, and a positive attitude!</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Is there parking available? <span class="toggle-arrow">▼</span></div>
+                <div class="faq-answer">Yes, we have free parking for members in our dedicated parking lot.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.faq-section {
+    padding: 40px 0;
+    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #2c3e50;
+    font-size: 2.2rem;
+    font-weight: 600;
+}
+
+.faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    margin-bottom: 15px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.faq-question {
+    padding: 20px;
+    cursor: pointer;
+    background: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #2c3e50;
+    font-weight: 500;
+    font-size: 1.1rem;
+    transition: background-color 0.3s;
+}
+
+.faq-question:hover {
+    background-color: #f1f3f5;
+}
+
+.toggle-arrow {
+    font-size: 1.2rem;
+    transition: transform 0.3s;
+}
+
+.faq-item.active .toggle-arrow {
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    display: none;
+    padding: 20px;
+    border-top: 1px solid #eee;
+    color: #666;
+    line-height: 1.6;
+    background: #fafafa;
+}
+
+.faq-item.active .faq-answer {
+    display: block;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const faqItems = document.querySelectorAll('.faq-item');
+    
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        
+        question.addEventListener('click', () => {
+            // Toggle active class on the clicked item
+            item.classList.toggle('active');
+            
+            // Get the answer element
+            const answer = item.querySelector('.faq-answer');
+            
+            // Smooth height transition (optional, requires height calculation)
+            if (item.classList.contains('active')) {
+                answer.style.display = 'block';
+            } else {
+                answer.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

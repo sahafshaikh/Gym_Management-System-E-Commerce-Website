@@ -1,0 +1,70 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Add New Class Schedule - GymWord Admin{% endblock %}
+
+{% block page_title %}Add New Class Schedule{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Add New Class Schedule</h1>
+        <a href="{% url 'admin_class_schedule_list' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Class Schedules
+        </a>
+    </div>
+
+    <!-- Create Form -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Schedule Information</h6>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><strong>Gym Class</strong></label>
+                        <select name="gym_class" class="form-select" required>
+                            <option value="">Select a class</option>
+                            {% for class in classes %}
+                            <option value="{{ class.id }}">{{ class.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><strong>Day</strong></label>
+                        <select name="day" class="form-select" required>
+                            <option value="">Select a day</option>
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
+                            <option value="Saturday">Saturday</option>
+                            <option value="Sunday">Sunday</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><strong>Time</strong></label>
+                        <input type="time" class="form-control" name="time" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><strong>Capacity</strong></label>
+                        <input type="number" class="form-control" name="capacity" min="1" value="20">
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Create Schedule
+                    </button>
+                    <a href="{% url 'admin_class_schedule_list' %}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}Membership Plans - GymWord{% endblock %}
+
+{% block content %}
+<style>
+/* Plans Section Styling */
+.plans-section {
+    padding: 4rem 0;
+    background: #f8f9fa;
+    text-align: center;
+}
+
+.plans-section h2 {
+    font-size: 2.5rem;
+    color: #2c3e50;
+    margin-bottom: 2rem;
+}
+
+.plans {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.plan {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.plan:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.plan h3 {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.plan .price {
+    font-size: 2rem;
+    color: #ff0000;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+
+.plan ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 2rem;
+}
+
+.plan ul li {
+    padding: 0.5rem 0;
+    color: #555;
+    position: relative;
+    padding-left: 25px;
+}
+
+.plan ul li:before {
+    content: '\f00c'; /* Font Awesome checkmark */
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    color: #ff0000;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.plan .btn-primary {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: #ff0000;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 5px;
+    color: white;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.plan .btn-primary:hover {
+    background: #cc0000;
+    transform: scale(1.05);
+}
+
+/* Responsive Design for Plans */
+@media (max-width: 768px) {
+    .plans {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .plans {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+<section class="plans-section">
+    <div class="container">
+        <h2>Membership Plans</h2>
+        
+        <div class="plans">
+            {% for plan in plans %}
+            <div class="plan">
+                <h3>{{ plan.name }}</h3>
+                <p class="price">₹{{ plan.price }}/month</p>
+                <ul>
+                    {% for feature in plan.feature_list %}
+                    <li>{{ feature.feature }}</li>
+                    {% endfor %}
+                </ul>
+                <a href="{% url 'subscribe_plan' plan.id %}" class="btn btn-primary">Book Now</a>
+            </div>
+            {% empty %}
+            <p>No plans available at the moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+

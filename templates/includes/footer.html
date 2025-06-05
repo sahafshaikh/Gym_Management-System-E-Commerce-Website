@@ -1,0 +1,54 @@
+<footer>
+    <div class="footer-content">
+        <div class="footer-section">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'about' %}">About</a></li>
+                <li><a href="{% url 'classes' %}">Classes</a></li>
+                <li><a href="{% url 'plans' %}">Plans</a></li>
+                <li><a href="{% url 'team' %}">Team</a></li>
+                <li><a href="{% url 'blog' %}">Blog</a></li>
+                <li><a href="{% url 'store' %}">Store</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>More Links</h3>
+            <ul>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="{% url 'timetable' %}">Timetable</a></li>
+                <li><a href="{% url 'tracker' %}">Tracker & Booking</a></li>
+                <li><a href="{% url 'booking_history' %}">Booking History</a></li>
+                <li><a href="{% url 'faq' %}">FAQ</a></li>
+                <li><a href="{% url 'contact' %}">Contact Us</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>Newsletter</h3>
+            <form id="newsletterForm">
+                {% csrf_token %}
+                <input type="email" placeholder="Your Email" required>
+                <button type="submit" class="btn btn-primary">Subscribe</button>
+            </form>
+            <p id="liveClock" style="margin-top: 10px;"></p>
+        </div>
+        <div class="footer-section">
+            <h3>Follow Us</h3>
+            <div class="social-links">
+                <a href="https://facebook.com/gymword" target="_blank">Facebook</a>
+                <a href="https://twitter.com/gymword" target="_blank">Twitter</a>
+                <a href="https://instagram.com/gymword" target="_blank">Instagram</a>
+                <a href="https://linkedin.com/company/gymword" target="_blank">LinkedIn</a>
+            </div>
+            <h3 style="margin-top: 15px;">Contact Us</h3>
+            <form action="{% url 'contact' %}" method="post" class="contact-form">
+                {% csrf_token %}
+                <input type="text" name="name" placeholder="Your Name" pattern="[A-Za-z ]{2,}" title="Name must be at least 2 characters, letters only" required>
+                <input type="email" name="email" placeholder="Your Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Enter a valid email" required>
+                <textarea name="message" placeholder="Your Message" required></textarea>
+                <button type="submit" class="btn btn-primary">Send</button>
+            </form>
+        </div>
+    </div>
+    <div class="copyright">© {% now "Y" %} GymWord. All rights reserved.</div>
+</footer>

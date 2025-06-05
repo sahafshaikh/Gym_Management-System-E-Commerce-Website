@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - GymWord{% endblock %}
+
+{% block content %}
+<style>
+/* style.css */
+
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styling */
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    min-height: 100vh;
+    background: url('https://images.unsplash.com/photo-1540497077202-7c8a3999166f?') no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+    overflow-x: hidden;
+}
+
+/* Container - white background, centered */
+.container {
+    max-width: 500px;
+    margin: 120px auto;
+    padding: 3rem;
+    background: #fff; /* White background */
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 0, 0, 0.2); /* Subtle red outline */
+    animation: slideUp 0.7s ease-out;
+}
+
+/* Section - centered and immersive */
+.auth-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: none;
+}
+
+/* Heading - bold red */
+h2 {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    color: #ff0000; /* Red */
+    font-size: 3rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+    letter-spacing: 1px;
+}
+
+/* Form - sleek and structured */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2.2rem;
+}
+
+/* Form group */
+.form-group {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 0.8rem;
+    color: #ff0000; /* Red */
+    font-weight: 700;
+    font-size: 1.25rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.form-group input {
+    padding: 1.1rem;
+    border: 2px solid #ff0000; /* Red border */
+    border-radius: 10px;
+    font-size: 1.2rem;
+    background: rgba(255, 255, 255, 0.9);
+    color: #1a1a1a;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #cc0000; /* Darker red */
+    box-shadow: 0 0 12px rgba(255, 0, 0, 0.8), inset 0 2px 5px rgba(0, 0, 0, 0.1); /* Red glow */
+    transform: scale(1.02);
+}
+
+/* Error messages - standout red */
+.form-group .errorlist {
+    color: #ff0000; /* Red */
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Button - bold and energetic */
+.btn {
+    padding: 1.3rem 3rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.4rem;
+    font-weight: 700;
+    background: #ff0000; /* Red */
+    color: #fff; /* White text */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    transition: all 0.4s ease;
+}
+
+.btn-primary:hover {
+    background: #cc0000; /* Darker red */
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(255, 0, 0, 0.7);
+}
+
+/* Auth toggle - sleek and inviting */
+.auth-toggle {
+    text-align: center;
+    margin-top: 2.5rem;
+    font-size: 1.2rem;
+    color: #333; /* Dark gray for contrast on white */
+}
+
+.auth-toggle a {
+    color: #ff0000; /* Red */
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.auth-toggle a:hover {
+    color: #cc0000; /* Darker red */
+    text-decoration: underline;
+}
+
+/* Animation - smooth entrance */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+    .container {
+        margin: 80px 15px;
+        padding: 2.5rem;
+    }
+    
+    h2 {
+        font-size: 2.5rem;
+    }
+    
+    .form-group input {
+        padding: 1rem;
+        font-size: 1.1rem;
+    }
+    
+    .btn {
+        padding: 1.2rem 2.5rem;
+        font-size: 1.3rem;
+    }
+    
+    .auth-toggle {
+        font-size: 1.1rem;
+    }
+}
+</style>
+
+<section class="auth-section">
+    <div class="container">
+        <h2>Login</h2>
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">Email / Username</label>
+                {{ form.username }}
+                {{ form.username.errors }}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.password.id_for_label }}">Password</label>
+                {{ form.password }}
+                {{ form.password.errors }}
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+        <p class="auth-toggle">New here? <a href="{% url 'register' %}">Register</a></p>
+    </div>
+</section>
+{% endblock %}
+

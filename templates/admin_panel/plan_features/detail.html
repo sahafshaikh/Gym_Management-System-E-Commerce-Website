@@ -1,0 +1,50 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Plan Feature Details - GymWord Admin{% endblock %}
+
+{% block page_title %}Plan Feature Details{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Plan Feature #{{ feature.id }}</h1>
+        <div>
+            <a href="{% url 'admin_plan_feature_edit' feature.id %}" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+            <a href="{% url 'admin_plan_feature_list' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Plan Features
+            </a>
+        </div>
+    </div>
+
+    <!-- Feature Details -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Feature Information</h6>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <strong>ID:</strong> {{ feature.id }}
+            </div>
+            <div class="mb-3">
+                <strong>Plan:</strong> <a href="{% url 'admin_plan_detail' feature.plan.id %}">{{ feature.plan.name }}</a>
+            </div>
+            <div class="mb-3">
+                <strong>Feature:</strong> {{ feature.feature }}
+            </div>
+            
+            <div class="text-end mt-4">
+                <form action="{% url 'admin_plan_feature_delete' feature.id %}" method="post" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-delete">
+                        <i class="fas fa-trash"></i> Delete Feature
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

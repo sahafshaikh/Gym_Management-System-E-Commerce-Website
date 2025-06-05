@@ -1,0 +1,535 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout - GymWord{% endblock %}
+
+{% block extra_css %}
+<style>
+  
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header bg-primary">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-white">Checkout</h1>
+                
+            </div>
+        </div>
+    </div>
+</section>
+<style>
+/* Checkout Page Styles */
+.checkout-section {
+    padding: 80px 0;
+    background-color: #f8f9fa;
+}
+
+.checkout-container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+/* Checkout Header */
+.checkout-header {
+    background-color: #000000;
+    color: #fff;
+    padding: 20px 30px;
+    position: relative;
+}
+
+.checkout-header h1 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 24px;
+}
+
+.checkout-header p {
+    margin: 10px 0 0;
+    opacity: 0.9;
+}
+
+/* Checkout Card */
+.checkout-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.checkout-card .card-body {
+    padding: 30px;
+}
+
+/* Payment Methods */
+.payment-methods {
+    margin-bottom: 30px;
+}
+
+.payment-method-card {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+.payment-method-card.active {
+    border-left: 4px solid #ff5722;
+    background-color: #f8f9fa;
+}
+
+.payment-method-header {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    cursor: pointer;
+}
+
+.payment-method-radio {
+    margin-right: 15px;
+}
+
+.payment-method-icon {
+    font-size: 24px;
+    color: #343a40;
+    width: 40px;
+    text-align: center;
+    margin-right: 15px;
+}
+
+.payment-method-title label {
+    font-weight: 600;
+    color: #343a40;
+    margin-bottom: 0;
+    cursor: pointer;
+}
+
+.payment-method-title p {
+    font-size: 14px;
+    margin-bottom: 0;
+}
+
+.payment-method-details {
+    padding: 0 15px 15px;
+    display: nonecafeteria: none;
+}
+
+.payment-method-details.active {
+    display: block;
+}
+
+/* Form Elements */
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #343a40;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #000000;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(255, 87, 34, 0.25);
+}
+
+.card-row {
+    display: flex;
+    gap: 15px;
+}
+
+/* Order Summary */
+.checkout-summary {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    height: 100%;
+}
+
+.checkout-summary h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #343a40;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.summary-total {
+    font-weight: 700;
+    font-size: 18px;
+    color: #343a40;
+    margin-top: 15px;
+    padding-top: 15px;
+}
+
+/* Buttons */
+.btn {
+    padding: 12px 25px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #000000;
+    color: #fff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #c22525;
+}
+
+.btn-outline-primary {
+    color: #0b0b0b;
+    border: 1px solid #070707;
+    background-color: transparent;
+}
+
+.btn-outline-primary:hover {
+    background-color: #d43131;
+    color: #fff;
+}
+
+.btn-lg {
+    padding: 14px 30px;
+}
+
+.d-grid {
+    display: grid;
+    gap: 10px;
+}
+
+/* Responsive Styles */
+@media (max-width: 991px) {
+    .checkout-section {
+        padding: 60px 0;
+    }
+}
+
+@media (max-width: 767px) {
+    .checkout-section {
+        padding: 40px 0;
+    }
+
+    .checkout-header {
+        padding: 15px 20px;
+    }
+
+    .checkout-card .card-body {
+        padding: 20px;
+    }
+
+    .checkout-summary {
+        margin-bottom: 30px;
+    }
+
+    .card-row {
+        flex-direction: column;
+        gap: 0;
+    }
+}
+
+    </style>
+<!-- Checkout Section -->
+<section class="checkout-section">
+    <div class="container">
+        <div class="checkout-header">
+            <h1>Complete Your Purchase</h1>
+            <p>You're just one step away from completing your purchase. Please review your order and provide payment details below.</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-8">
+                <form method="post" id="checkout-form">
+                    {% csrf_token %}
+                    
+                    <div class="checkout-card">
+                        <div class="card-body">
+                            <h3 class="mb-4">Payment Method</h3>
+                            
+                            <div class="payment-methods">
+                                <div class="payment-method-card" data-method="card">
+                                    <div class="payment-method-header">
+                                        <div class="payment-method-radio">
+                                            <input type="radio" name="payment_method" id="payment-card" value="card" required>
+                                        </div>
+                                        <div class="payment-method-icon">
+                                            <i class="fas fa-credit-card"></i>
+                                        </div>
+                                        <div class="payment-method-title">
+                                            <label for="payment-card" class="mb-0">Credit / Debit Card</label>
+                                            <p class="text-muted mb-0 small">Pay securely with your card</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="payment-method-details">
+                                        <div class="card-details">
+                                            <div class="mb-3">
+                                                <label for="card-number" class="form-label">Card Number</label>
+                                                <input type="text" class="form-control" id="card-number" placeholder="1234 5678 9012 3456">
+                                            </div>
+                                            
+                                            <div class="card-row">
+                                                <div class="mb-3 flex-grow-1">
+                                                    <label for="card-expiry" class="form-label">Expiry Date</label>
+                                                    <input type="text" class="form-control" id="card-expiry" placeholder="MM/YY">
+                                                </div>
+                                                
+                                                <div class="mb-3 flex-grow-1">
+                                                    <label for="card-cvv" class="form-label">CVV</label>
+                                                    <input type="text" class="form-control" id="card-cvv" placeholder="123">
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label for="card-name" class="form-label">Name on Card</label>
+                                                <input type="text" class="form-control" id="card-name" placeholder="John Doe">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="payment-method-card" data-method="upi">
+                                    <div class="payment-method-header">
+                                        <div class="payment-method-radio">
+                                            <input type="radio" name="payment_method" id="payment-upi" value="upi" required>
+                                        </div>
+                                        <div class="payment-method-icon">
+                                            <i class="fas fa-mobile-alt"></i>
+                                        </div>
+                                        <div class="payment-method-title">
+                                            <label for="payment-upi" class="mb-0">UPI</label>
+                                            <p class="text-muted mb-0 small">Pay using UPI apps like Google Pay, PhonePe, etc.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="payment-method-details">
+                                        <div class="upi-details">
+                                            <div class="mb-3">
+                                                <label for="upi-id" class="form-label">UPI ID</label>
+                                                <input type="text" class="form-control" id="upi-id" placeholder="yourname@upi">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="payment-method-card" data-method="cash">
+                                    <div class="payment-method-header">
+                                        <div class="payment-method-radio">
+                                            <input type="radio" name="payment_method" id="payment-cash" value="cash" required>
+                                        </div>
+                                        <div class="payment-method-icon">
+                                            <i class="fas fa-money-bill-wave"></i>
+                                        </div>
+                                        <div class="payment-method-title">
+                                            <label for="payment-cash" class="mb-0">Pay at Gym</label>
+                                            <p class="text-muted mb-0 small">Pay in cash or card at the gym reception</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">Complete Payment</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <!--<div class="col-lg-4">
+                <div class="checkout-summary">
+                    <h3>Order Summary</h3>
+                    
+                    <div class="summary-item">
+                        <span>Item:</span>
+                        <span>{{ item_name }}</span>
+                    </div>
+                    
+                    {% if subscription %}
+                    <div class="summary-item">
+                        <span>Duration:</span>
+                        <span>{{ subscription.plan.duration }} {{ subscription.plan.duration_unit }}</span>
+                    </div>
+                    
+                    <div class="summary-item">
+                        <span>Start Date:</span>
+                        <span>{{ subscription.start_date|date:"F d, Y" }}</span>
+                    </div>
+                    
+                    <div class="summary-item">
+                        <span>End Date:</span>
+                        <span>{{ subscription.end_date|date:"F d, Y" }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if order %}
+                    <div class="summary-item">
+                        <span>Quantity:</span>
+                        <span>{{ order.quantity }}</span>
+                    </div>
+                    
+                    <div class="summary-item">
+                        <span>Unit Price:</span>
+                        <span>₹{{ order.unit_price }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="summary-item summary-total">
+                        <span>Total:</span>
+                        <span>₹{{ total_amount }}</span>
+                    </div>
+                </div>
+            -->
+                <div class="checkout-card">
+                    <div class="card-body">
+                        <h5 class="mb-3">Need Help?</h5>
+                        <p class="mb-3">If you have any questions or need assistance with your purchase, please don't hesitate to contact us.</p>
+                        <div class="d-grid">
+                            <a href="{% url 'contact' %}" class="btn btn-outline-primary">Contact Support</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Payment method selection
+        const paymentMethodCards = document.querySelectorAll('.payment-method-card');
+        const paymentMethodRadios = document.querySelectorAll('input[name="payment_method"]');
+        
+        // Set the first payment method as selected by default
+        if (paymentMethodRadios.length > 0) {
+            paymentMethodRadios[0].checked = true;
+            paymentMethodCards[0].classList.add('active');
+        }
+        
+        paymentMethodCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const method = this.getAttribute('data-method');
+                const radio = document.getElementById(`payment-${method}`);
+                
+                // Uncheck all radios
+                paymentMethodRadios.forEach(radio => {
+                    radio.checked = false;
+                });
+                
+                // Check the selected radio
+                radio.checked = true;
+                
+                // Remove active class from all cards
+                paymentMethodCards.forEach(card => {
+                    card.classList.remove('active');
+                });
+                
+                // Add active class to selected card
+                this.classList.add('active');
+            });
+        });
+        
+        // Form validation
+        const checkoutForm = document.getElementById('checkout-form');
+        
+        if (checkoutForm) {
+            checkoutForm.addEventListener('submit', function(e) {
+                const selectedMethod = document.querySelector('input[name="payment_method"]:checked');
+                
+                if (!selectedMethod) {
+                    e.preventDefault();
+                    alert('Please select a payment method.');
+                    return;
+                }
+                
+                const method = selectedMethod.value;
+                
+                // Validate card details if card payment is selected
+                if (method === 'card') {
+                    const cardNumber = document.getElementById('card-number').value;
+                    const cardExpiry = document.getElementById('card-expiry').value;
+                    const cardCvv = document.getElementById('card-cvv').value;
+                    const cardName = document.getElementById('card-name').value;
+                    
+                    if (!cardNumber || !cardExpiry || !cardCvv || !cardName) {
+                        e.preventDefault();
+                        alert('Please fill in all card details.');
+                        return;
+                    }
+                    
+                    // Basic card number validation - SIMPLIFIED FOR DEMO
+                    if (cardNumber.replace(/\s/g, '').length < 13) {
+                        e.preventDefault();
+                        alert('Please enter a valid card number.');
+                        return;
+                    }
+                    
+                    // Basic expiry date validation - SIMPLIFIED FOR DEMO
+                    if (!cardExpiry.includes('/')) {
+                        e.preventDefault();
+                        alert('Please enter a valid expiry date in MM/YY format.');
+                        return;
+                    }
+                    
+                    // Basic CVV validation - SIMPLIFIED FOR DEMO
+                    if (cardCvv.length < 3) {
+                        e.preventDefault();
+                        alert('Please enter a valid CVV.');
+                        return;
+                    }
+                }
+                
+                // Validate UPI ID if UPI payment is selected
+                if (method === 'upi') {
+                    const upiId = document.getElementById('upi-id').value;
+                    
+                    if (!upiId) {
+                        e.preventDefault();
+                        alert('Please enter your UPI ID.');
+                        return;
+                    }
+                    
+                    // Basic UPI ID validation - SIMPLIFIED FOR DEMO
+                    if (!upiId.includes('@')) {
+                        e.preventDefault();
+                        alert('Please enter a valid UPI ID (e.g., yourname@upi).');
+                        return;
+                    }
+                }
+                
+                // Show loading state
+                const submitButton = this.querySelector('button[type="submit"]');
+                submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
+                submitButton.disabled = true;
+            });
+        }
+    });
+</script>
+{% endblock %}
+

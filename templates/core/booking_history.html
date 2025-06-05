@@ -1,0 +1,42 @@
+<
+{% extends 'base.html' %}
+
+{% block title %}Booking History - GymWord{% endblock %}
+
+{% block content %}
+<section class="booking-history-section">
+    <div class="container">
+        <h2>Booking History</h2>
+        
+        {% if bookings %}
+        <div class="bookings-list">
+            {% for booking in bookings %}
+            <div class="booking-card">
+                <div class="booking-header">
+                    <h3>{{ booking.class_schedule.gym_class.name }}</h3>
+                    <p class="booking-status {{ booking.status|lower }}">{{ booking.status }}</p>
+                </div>
+                <div class="booking-info">
+                    <p><strong>Day:</strong> {{ booking.class_schedule.day }}</p>
+                    <p><strong>Time:</strong> {{ booking.class_schedule.time }}</p>
+                    <p><strong>Date:</strong> {{ booking.booking_date|date:"F d, Y" }}</p>
+                    <p><strong>Booked On:</strong> {{ booking.created_at|date:"F d, Y" }}</p>
+                </div>
+                <div class="booking-actions">
+                    {% if booking.status == 'Booked' %}
+                    <a href="{% url 'cancel_booking' booking.id %}" class="btn btn-secondary">Cancel Booking</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-bookings">
+            <p>You don't have any booking history.</p>
+            <a href="{% url 'booking' %}" class="btn btn-primary">Book a Class</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+

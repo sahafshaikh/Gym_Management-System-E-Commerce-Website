@@ -1,0 +1,102 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Contact Message Details - GymWord Admin{% endblock %}
+
+{% block page_title %}Contact Message Details{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h5 class="card-title">Message from {{ message.name }}</h5>
+            </div>
+            <div class="col-md-6 text-end">
+                <a href="{% url 'admin_contact_message_list' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to List
+                </a>
+                <form method="POST" action="{% url 'admin_contact_message_delete' message.id %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-delete">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="message-details">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="detail-item">
+                        <span class="detail-label">Name:</span>
+                        <span class="detail-value">{{ message.name }}</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="detail-item">
+                        <span class="detail-label">Email:</span>
+                        <span class="detail-value">{{ message.email }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="detail-item">
+                        <span class="detail-label">Subject:</span>
+                        <span class="detail-value">{{ message.subject }}</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="detail-item">
+                        <span class="detail-label">Date:</span>
+                        <span class="detail-value">{{ message.created_at|date:"F d, Y H:i" }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <div class="detail-item">
+                        <span class="detail-label">Status:</span>
+                        <span class="detail-value">
+                            {% if message.is_read %}
+                            <span class="badge bg-success">Read</span>
+                            {% else %}
+                            <span class="badge bg-warning">Unread</span>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="detail-item">
+                        <span class="detail-label">Message:</span>
+                        <div class="message-content mt-2 p-3 border rounded">
+                            {{ message.message|linebreaks }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="reply-section mt-4">
+            <h5>Reply to this message</h5>
+            <form method="POST" action="{% url 'admin_contact_message_reply' message.id %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="reply" class="form-label">Your Reply</label>
+                    <textarea name="reply" id="reply" class="form-control" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Send Reply
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

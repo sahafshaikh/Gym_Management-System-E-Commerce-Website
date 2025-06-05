@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+{% block title %}Order Confirmation - GymWord{% endblock %}
+
+{% block content %}
+<section class="order-confirmation-section">
+    <div class="container">
+        <h2>Order Confirmation</h2>
+        
+        <div class="confirmation-message">
+            <div class="success-icon">✓</div>
+            <h3>Thank You for Your Order!</h3>
+            <p>Your order has been placed successfully.</p>
+            <p>Order #{{ order.id }}</p>
+        </div>
+        
+        <div class="order-details">
+            <h3>Order Details</h3>
+            <p><strong>Order Date:</strong> {{ order.created_at|date:"F d, Y" }}</p>
+            <p><strong>Payment Method:</strong> {{ order.get_payment_method_display }}</p>
+            <p><strong>Order Status:</strong> {{ order.get_status_display }}</p>
+            <p><strong>Total Amount:</strong> ₹{{ order.total }}</p>
+            
+            <h4>Items</h4>
+            <div class="order-items">
+                {% for item in order.items.all %}
+                <div class="order-item">
+                    <div class="item-details">
+                        <h5>{{ item.product.name }}</h5>
+                        <p>Price: ₹{{ item.price }}</p>
+                        <p>Quantity: {{ item.quantity }}</p>
+                    </div>
+                    <p class="item-total">₹{{ item.product.price|mul:item.quantity|floatformat:2 }}</p>
+
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="order-actions">
+            <a href="{% url 'orders' %}" class="btn btn-secondary">View All Orders</a>
+            <a href="{% url 'store' %}" class="btn btn-primary">Continue Shopping</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

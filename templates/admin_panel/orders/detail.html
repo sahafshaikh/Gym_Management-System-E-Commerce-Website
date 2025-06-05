@@ -1,0 +1,129 @@
+{% extends 'admin_panel/base.html' %}
+{% load custom_filters %}
+
+{% block title %}Order Details - GymWord Admin{% endblock %}
+
+{% block page_title %}Order Details{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Order #{{ order.id }}</h1>
+        <div>
+            <a href="{% url 'admin_order_edit' order.id %}" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+            <a href="{% url 'admin_order_list' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Orders
+            </a>
+        </div>
+    </div>
+
+    <!-- Order Details -->
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Order Information</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Order ID:</strong> #{{ order.id }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Customer:</strong> 
+                        <a href="{% url 'admin_user_detail' order.user.id %}">{{ order.user.username }}</a>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Total Amount:</strong> ₹{{ order.total }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Payment Method:</strong> {{ order.get_payment_method_display }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Status:</strong>
+                        <span class="badge bg-{% if order.status == 'completed' %}success{% elif order.status == 'pending' %}warning{% elif order.status == 'cancelled' %}danger{% else %}info{% endif %}">
+                            {{ order.get_status_display }}
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Order Date:</strong> {{ order.created_at|date:"F d, Y H:i" }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Last Updated:</strong> {{ order.updated_at|date:"F d, Y H:i" }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Customer Information</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Name:</strong> {{ order.user.get_full_name }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Email:</strong> {{ order.user.email }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Mobile:</strong> {{ order.user.profile.mobile|default:"Not provided" }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Address:</strong>
+                        <p>{{ order.user.profile.address|default:"Not provided" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Items -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Order Items</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'admin_product_detail' item.product.id %}">{{ item.product.name }}</a>
+                            </td>
+                            <td>₹{{ item.price }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>₹{{ item.price|floatformat:2|mul:item.quantity }}</td>
+
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center">No items found for this order.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="3" class="text-end">Total:</th>
+                            <th>₹{{ order.total }}</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

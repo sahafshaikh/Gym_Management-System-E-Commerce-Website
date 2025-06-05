@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }} - GymWord Blog{% endblock %}
+
+{% block content %}
+<style>
+.blog-detail-section {
+    padding: 40px 0;
+}
+
+.blog-post-detail {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.blog-featured-image {
+    width: 100%;
+    max-width: 600px;    /* Sets maximum width */
+    height: auto;        /* Maintains aspect ratio */
+    display: block;
+    margin: 20px auto;   /* Centers image with spacing */
+    border-radius: 8px;  /* Adds subtle rounded corners */
+    object-fit: cover;   /* Ensures image fills space nicely */
+}
+
+h2 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.meta {
+    color: #666;
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+.blog-content {
+    line-height: 1.6;
+    margin: 20px 0;
+}
+
+.blog-actions {
+    margin-top: 30px;
+}
+
+.btn-secondary {
+    padding: 10px 20px;
+    background-color: #6c757d;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+</style>
+<section class="blog-detail-section">
+    <div class="container">
+        <div class="blog-post-detail">
+            <h2>{{ post.title }}</h2>
+            <p class="meta">{{ post.created_at|date:"F d, Y" }} by {{ post.author.get_full_name }}</p>
+            
+            {% if post.image %}
+            <img src="{{ post.image.url }}" alt="{{ post.title }}" class="blog-featured-image">
+            {% else %}
+            <img src="https://source.unsplash.com/1200x600/?fitness" alt="{{ post.title }}" class="blog-featured-image">
+            {% endif %}
+            
+            <div class="blog-content">
+                {{ post.content|linebreaks }}
+            </div>
+            
+            <div class="blog-actions">
+                <a href="{% url 'blog' %}" class="btn btn-secondary">Back to Blog</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

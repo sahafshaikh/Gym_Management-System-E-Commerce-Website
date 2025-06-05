@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us - GymWord{% endblock %}
+
+{% block content %}
+<section class="contact-section">
+    <div class="container">
+        <h2>Contact Us</h2>
+        
+        <div class="contact-grid">
+            <div class="contact-info">
+                <h3>Get in Touch</h3>
+                <p>We'd love to hear from you! Fill out the form and we'll get back to you as soon as possible.</p>
+                
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <h4>Address</h4>
+                        <p>123 Fitness Street, Workout City, 12345</p>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <h4>Phone</h4>
+                        <p>+91 9876543210</p>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <h4>Email</h4>
+                        <p>info@gymword.com</p>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <h4>Hours</h4>
+                        <p>Monday - Friday: 6 AM - 10 PM</p>
+                        <p>Weekends: 8 AM - 8 PM</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contact-form-container">
+                <h3>Send a Message</h3>
+                <form method="post" class="contact-form">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="{{ form.name.id_for_label }}">Your Name</label>
+                        {{ form.name }}
+                        {{ form.name.errors }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.email.id_for_label }}">Your Email</label>
+                        {{ form.email }}
+                        {{ form.email.errors }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.message.id_for_label }}">Your Message</label>
+                        {{ form.message }}
+                        {{ form.message.errors }}
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

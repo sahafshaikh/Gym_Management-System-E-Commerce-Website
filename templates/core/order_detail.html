@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+{% block title %}Order #{{ order.id }} - GymWord{% endblock %}
+
+{% block content %}
+<section class="order-detail-section">
+    <div class="container">
+        <h2>Order #{{ order.id }}</h2>
+        
+        <div class="order-info">
+            <p><strong>Order Date:</strong> {{ order.created_at|date:"F d, Y" }}</p>
+            <p><strong>Payment Method:</strong> {{ order.get_payment_method_display|default:"Not specified" }}</p>
+            <p><strong>Order Status:</strong> {{ order.get_status_display|default:"Not specified" }}</p>
+            <p><strong>Total Amount:</strong> ₹{{ order.total|default:"0.00" }}</p>
+        </div>
+        
+        <div class="order-items">
+            <h3>Items</h3>
+            {% if order.items.all %}
+                {% for item in order.items.all %}
+                <div class="order-item">
+                    <div class="item-details">
+                        <h4>{{ item.product.name|default:"Unnamed Product" }}</h4>
+                        <p>Price: ₹{{ item.price|default:"0.00" }}</p>
+                        <p>Quantity: {{ item.quantity|default:"1" }}</p>
+                    </div>
+                    <p class="item-total">
+                        ₹{% if item.product.price and item.quantity %}
+                            {{ item.product.price|mul:item.quantity|floatformat:2 }}
+                        {% else %}
+                            0.00
+                        {% endif %}
+                    </p>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="no-items">No items in this order</p>
+            {% endif %}
+        </div>
+        
+        <div class="order-actions">
+            <a href="{% url 'orders' %}" class="btn btn-secondary">Back to Orders</a>
+        </div>
+    </div>
+</section>
+
+<style>
+.order-detail-section {
+    padding: 40px 0;
+    background-color: #fff;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+h2 {
+    color: #c0392b;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e74c3c;
+    padding-bottom: 10px;
+}
+
+.order-info {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    border-left: 4px solid #e74c3c;
+}
+
+.order-info p {
+    margin: 10px 0;
+    color: #555;
+}
+
+.order-info strong {
+    color: #c0392b;
+    min-width: 120px;
+    display: inline-block;
+}
+
+.order-items {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.order-items h3 {
+    color: #c0392b;
+    margin-bottom: 20px;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.item-details h4 {
+    color: #c0392b;
+    margin: 0 0 5px 0;
+    font-size: 1.1em;
+}
+
+.item-details p {
+    margin: 5px 0;
+    color: #666;
+    font-size: 0.95em;
+}
+
+.item-total {
+    color: #e74c3c;
+    font-weight: bold;
+    font-size: 1.1em;
+    min-width: 100px;
+    text-align: right;
+}
+
+.no-items {
+    color: #666;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+}
+
+.order-actions {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.btn-secondary {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: #e74c3c;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    font-weight: 500;
+}
+
+.btn-secondary:hover {
+    background-color: #c0392b;
+    color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .order-item {
+        flex-direction: column;
+        text-align: left;
+    }
+    
+    .item-total {
+        text-align: left;
+        margin-top: 10px;
+    }
+}
+</style>
+{% endblock %}

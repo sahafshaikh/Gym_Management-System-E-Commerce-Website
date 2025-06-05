@@ -1,0 +1,101 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Create Blog Post - GymWord Admin{% endblock %}
+
+{% block page_title %}Create Blog Post{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Create New Blog Post</h1>
+        <a href="{% url 'admin_blog_post_list' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Blog Posts
+        </a>
+    </div>
+
+    <!-- Create Blog Post Form -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Blog Post Information</h6>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="author" class="form-label">Author</label>
+                    <select class="form-select" id="author" name="author" required>
+                        <option value="">Select Author</option>
+                        {% for user in users %}
+                        <option value="{{ user.id }}" {% if user.id == request.user.id %}selected{% endif %}>{{ user.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="content" class="form-label">Content</label>
+                    <textarea class="form-control rich-text-editor" id="content" name="content" rows="10" required></textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="image" class="form-label">Featured Image</label>
+                    <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                </div>
+                
+                <div class="mb-3">
+                    <div id="imagePreviewContainer" style="display: none;">
+                        <label class="form-label">Image Preview</label>
+                        <div>
+                            <img id="imagePreview" src="#" alt="Featured Image Preview" class="img-thumbnail" style="max-width: 300px; max-height: 200px;">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">Create Blog Post</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Image preview
+        const imageInput = document.getElementById('image');
+        const imagePreview = document.getElementById('imagePreview');
+        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+        
+        imageInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreviewContainer.style.display = 'block';
+                }
+                
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+        
+        // Initialize rich text editor if available
+        if (typeof ClassicEditor !== 'undefined') {
+            ClassicEditor
+                .create(document.querySelector('#content'))
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+    });
+</script>
+{% endblock %}
+

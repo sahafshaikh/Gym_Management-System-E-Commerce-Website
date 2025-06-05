@@ -1,0 +1,205 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="GymWord - Your trusted fitness partner since 2010">
+    <meta name="keywords" content="gym, fitness, workout, training, health">
+    <title>{% block title %}GymWord - Fitness Unleashed{% endblock %}</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style1.css' %}">
+    
+    <!-- Stripe Integration -->
+    <script src="https://js.stripe.com/v3/"></script>
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- Header -->
+    {% include 'includes/header.html' %}
+    
+    <!-- Messages -->
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+            <div class="message-content">
+                {{ message }}
+                <span class="close-message">&times;</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- Main Content -->
+    {% block content %}{% endblock %}
+    
+    <!-- Footer -->
+    {% include 'includes/footer.html' %}
+    
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+    
+    <!-- Modals -->
+    {% block modals %}{% endblock %}
+    
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeCart">&times;</span>
+            <h2>Your Cart</h2>
+            <div id="cartItems" class="cart-items"></div>
+            <div id="cartTotal" class="cart-total">Total: $0</div>
+            <div class="cart-actions">
+                <a href="{% url 'cart' %}" class="btn btn-secondary">View Cart</a>
+                <a href="{% url 'checkout' %}" id="checkoutBtn" class="btn btn-primary">Checkout</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main JavaScript -->
+    <script src="{% static 'js/main.js' %}"></script>
+    
+    <!-- Custom Scripts -->
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Close messages
+            const closeButtons = document.querySelectorAll('.close-message');
+            closeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.parentElement.parentElement.style.display = 'none';
+                });
+            });
+            
+            // Auto-hide messages after 5 seconds
+            setTimeout(function() {
+                const messages = document.querySelectorAll('.message');
+                messages.forEach(message => {
+                    message.style.display = 'none';
+                });
+            }, 5000);
+            
+            // Back to top button
+            const backToTopButton = document.getElementById('backToTop');
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTopButton.style.display = 'block';
+                } else {
+                    backToTopButton.style.display = 'none';
+                }
+            });
+            
+            backToTopButton.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Cart modal
+            const cartIcon = document.getElementById('cartIcon');
+            const cartModal = document.getElementById('cartModal');
+            const closeCart = document.getElementById('closeCart');
+            
+            if (cartIcon && cartModal && closeCart) {
+                cartIcon.addEventListener('click', function() {
+                    cartModal.style.display = 'block';
+                    fetchCartItems();
+                });
+                
+                closeCart.addEventListener('click', function() {
+                    cartModal.style.display = 'none';
+                });
+                
+                window.addEventListener('click', function(event) {
+                    if (event.target == cartModal) {
+                        cartModal.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Profile dropdown
+            const profileIcon = document.getElementById('profileIcon');
+            const profileDropdown = document.getElementById('profileDropdown');
+            
+            if (profileIcon && profileDropdown) {
+                profileIcon.addEventListener('click', function() {
+                    profileDropdown.classList.toggle('show');
+                });
+                
+                window.addEventListener('click', function(event) {
+                    if (!event.target.matches('#profileIcon') && !event.target.closest('#profileDropdown')) {
+                        if (profileDropdown.classList.contains('show')) {
+                            profileDropdown.classList.remove('show');
+                        }
+                    }
+                });
+            }
+            
+            // Mobile navigation
+            const navToggle = document.getElementById('navToggle');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (navToggle && navLinks) {
+                navToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('show');
+                });
+            }
+        });
+        
+        // Fetch cart items for the modal
+        function fetchCartItems() {
+            fetch('{% url "api_get_cart" %}')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const cartItems = document.getElementById('cartItems');
+                        const cartTotal = document.getElementById('cartTotal');
+                        const checkoutBtn = document.getElementById('checkoutBtn');
+                        
+                        cartItems.innerHTML = '';
+                        
+                        if (data.items.length === 0) {
+                            cartItems.innerHTML = '<p>Your cart is empty.</p>';
+                            checkoutBtn.style.display = 'none';
+                        } else {
+                            data.items.forEach(item => {
+                                const itemElement = document.createElement('div');
+                                itemElement.className = 'cart-modal-item';
+                                itemElement.innerHTML = `
+                                    <div class="item-details">
+                                        <h4>${item.name}</h4>
+                                        <p>$${item.price.toFixed(2)} x ${item.quantity}</p>
+                                    </div>
+                                    <p class="item-total">$${item.total.toFixed(2)}</p>
+                                `;
+                                cartItems.appendChild(itemElement);
+                            });
+                            
+                            cartTotal.textContent = `Total: $${data.total.toFixed(2)}`;
+                            checkoutBtn.style.display = 'inline-block';
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching cart:', error);
+                });
+        }
+    </script>
+    
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,65 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Edit Workout - GymWord Admin{% endblock %}
+
+{% block page_title %}Edit Workout{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Edit Workout #{{ workout.id }}</h1>
+        <a href="{% url 'admin_workout_list' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Workouts
+        </a>
+    </div>
+
+    <!-- Edit Workout Form -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Workout Information</h6>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="user" class="form-label">User</label>
+                    <select class="form-select" id="user" name="user" required>
+                        <option value="">Select User</option>
+                        {% for user in users %}
+                        <option value="{{ user.id }}" {% if workout.user.id == user.id %}selected{% endif %}>{{ user.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="name" class="form-label">Workout Name</label>
+                    <input type="text" class="form-control" id="name" name="name" value="{{ workout.name }}" required>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="duration" class="form-label">Duration (minutes)</label>
+                        <input type="number" class="form-control" id="duration" name="duration" min="1" value="{{ workout.duration }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="calories" class="form-label">Calories Burned</label>
+                        <input type="number" class="form-control" id="calories" name="calories" min="1" value="{{ workout.calories }}" required>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="date" class="form-label">Date</label>
+                    <input type="date" class="form-control" id="date" name="date" value="{{ workout.date|date:'Y-m-d' }}" required>
+                </div>
+                
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">Update Workout</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

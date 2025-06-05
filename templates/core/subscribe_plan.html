@@ -1,0 +1,323 @@
+{% extends 'base.html' %}
+
+{% block title %}Subscribe to {{ plan.name }} - GymWord{% endblock %}
+
+{% block content %}
+<style>
+    /* Subscribe Plan Section */
+    .subscribe-plan-section {
+        padding: 60px 0;
+        background-color: #f5f7fa;
+        min-height: 100vh;
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+    
+    /* Headings */
+    h2 {
+        font-size: 32px;
+        color: #2c3e50;
+        margin-bottom: 40px;
+        text-align: center;
+        font-weight: 700;
+    }
+    
+    h3 {
+        font-size: 24px;
+        color: #34495e;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+    
+    h4 {
+        font-size: 18px;
+        color: #34495e;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+    
+    /* Plan Details */
+    .plan-details {
+        background-color: #ffffff;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        margin-bottom: 40px;
+    }
+    
+    .price {
+        font-size: 28px;
+        color: #e74c3c;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+    
+    .description {
+        font-size: 16px;
+        color: #7f8c8d;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+    
+    .features-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .features-list li {
+        font-size: 16px;
+        color: #2c3e50;
+        padding: 10px 0;
+        position: relative;
+        padding-left: 25px;
+    }
+    
+    .features-list li:before {
+        content: "✓";
+        color: #27ae60;
+        position: absolute;
+        left: 0;
+        font-weight: bold;
+    }
+    
+    /* Payment Details */
+    .payment-details {
+        background-color: #ffffff;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+    
+    .payment-options {
+        margin-bottom: 25px;
+    }
+    
+    .payment-options label {
+        display: block;
+        margin-bottom: 15px;
+        font-size: 16px;
+        color: #34495e;
+        cursor: pointer;
+        padding-left: 30px;
+        position: relative;
+    }
+    
+    .payment-options input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+    }
+    
+    .payment-options input[type="radio"] + span::before {
+        content: '';
+        width: 20px;
+        height: 20px;
+        border: 2px solid #bdc3c7;
+        border-radius: 50%;
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: all 0.3s ease;
+    }
+    
+    .payment-options input[type="radio"]:checked + span::before {
+        border-color: #e74c3c;
+        background-color: #e74c3c;
+    }
+    
+    .payment-options input[type="radio"]:checked + span::after {
+        content: '';
+        width: 10px;
+        height: 10px;
+        background-color: #fff;
+        border-radius: 50%;
+        position: absolute;
+        left: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    
+    /* Form Styling */
+    .payment-method-option {
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        font-size: 14px;
+        color: #34495e;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+    
+    .form-group input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 16px;
+        color: #2c3e50;
+        transition: border-color 0.3s ease;
+    }
+    
+    .form-group input:focus {
+        outline: none;
+        border-color: #e74c3c;
+        box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+    }
+    
+    .form-row {
+        display: flex;
+        gap: 20px;
+    }
+    
+    .form-row .form-group {
+        flex: 1;
+    }
+    
+    /* Button */
+    .btn {
+        display: inline-block;
+        padding: 14px 30px;
+        background-color: #e74c3c;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        width: 100%;
+    }
+    
+    .btn:hover {
+        background-color: #c0392b;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .subscribe-plan-section {
+            padding: 40px 0;
+        }
+        
+        h2 {
+            font-size: 28px;
+        }
+        
+        .plan-details, .payment-details {
+            padding: 20px;
+        }
+        
+        .form-row {
+            flex-direction: column;
+            gap: 0;
+        }
+        
+        .price {
+            font-size: 24px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        h2 {
+            font-size: 24px;
+        }
+        
+        h3 {
+            font-size: 20px;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+        }
+    }
+    </style>
+<section class="subscribe-plan-section">
+    <div class="container">
+        <h2>Subscribe to {{ plan.name }}</h2>
+        
+        <div class="plan-details">
+            <h3>{{ plan.name }}</h3>
+            <p class="price">₹{{ plan.price }}/month</p>
+            <p class="description">{{ plan.description }}</p>
+            
+            <h4>Features</h4>
+            <ul class="features-list">
+                {% for feature in plan.features.all %}
+                <li>{{ feature.feature }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <div class="payment-details">
+            <h3>Payment Details</h3>
+            <form method="post" class="payment-form">
+                {% csrf_token %}
+                
+                <div class="payment-options">
+                    <label>
+                        <input type="radio" name="payment_method" value="card" checked> Credit/Debit Card
+                    </label>
+                    <label>
+                        <input type="radio" name="payment_method" value="upi"> UPI
+                    </label>
+                </div>
+                
+                <div id="card-details" class="payment-method-option" data-method="card">
+                    <div class="form-group">
+                        <label>Card Number</label>
+                        <input type="text" placeholder="1234 5678 9012 3456" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Expiry Date</label>
+                            <input type="text" placeholder="MM/YY" required>
+                        </div>
+                        <div class="form-group">
+                            <label>CVV</label>
+                            <input type="text" placeholder="123" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Name on Card</label>
+                        <input type="text" placeholder="John Doe" required>
+                    </div>
+                </div>
+                
+                <div id="upi-details" class="payment-method-option" data-method="upi" style="display: none;">
+                    <div class="form-group">
+                        <label>UPI ID</label>
+                        <input type="text" placeholder="name@upi" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Book Now</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const paymentMethods = document.querySelectorAll('input[name="payment_method"]');
+        paymentMethods.forEach(method => {
+            method.addEventListener('change', (e) => {
+                document.querySelectorAll('.payment-method-option').forEach(option => {
+                    option.style.display = option.getAttribute('data-method') === e.target.value ? 'block' : 'none';
+                });
+            });
+        });
+    });
+</script>
+{% endblock %}
+

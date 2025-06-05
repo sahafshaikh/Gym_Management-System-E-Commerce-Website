@@ -1,0 +1,172 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}User Details - GymWord Admin{% endblock %}
+
+{% block page_title %}User Details{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">User: {{ user.username }}</h1>
+        <div>
+            <a href="{% url 'admin_user_edit' user.id %}" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+            <a href="{% url 'admin_user_list' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Users
+            </a>
+        </div>
+    </div>
+
+    <!-- User Details -->
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Account Information</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>ID:</strong> {{ user.id }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Username:</strong> {{ user.username }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Email:</strong> {{ user.email }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Full Name:</strong> {{ user.get_full_name }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Date Joined:</strong> {{ user.date_joined|date:"F d, Y H:i" }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Last Login:</strong> {{ user.last_login|date:"F d, Y H:i"|default:"Never" }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Status:</strong>
+                        <span class="badge bg-{% if user.is_active %}success{% else %}danger{% endif %}">
+                            {% if user.is_active %}Active{% else %}Inactive{% endif %}
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Admin Access:</strong>
+                        <span class="badge bg-{% if user.is_staff %}primary{% else %}secondary{% endif %}">
+                            {% if user.is_staff %}Yes{% else %}No{% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Profile Information</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Mobile:</strong> {{ user.profile.mobile|default:"Not provided" }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Gender:</strong> {{ user.profile.get_gender_display|default:"Not provided" }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Date of Birth:</strong> {{ user.profile.dob|date:"F d, Y"|default:"Not provided" }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Address:</strong>
+                        <p>{{ user.profile.address|default:"Not provided" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Activity -->
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Orders</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Date</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in user.orders.all|slice:":5" %}
+                                <tr>
+                                    <td><a href="{% url 'admin_order_detail' order.id %}">#{{ order.id }}</a></td>
+                                    <td>{{ order.created_at|date:"M d, Y" }}</td>
+                                    <td>₹{{ order.total }}</td>
+                                    <td>
+                                        <span class="badge bg-{% if order.status == 'completed' %}success{% elif order.status == 'pending' %}warning{% elif order.status == 'cancelled' %}danger{% else %}info{% endif %}">
+                                            {{ order.get_status_display }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center">No orders found</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Active Subscriptions</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Plan</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for subscription in user.subscriptions.all %}
+                                <tr>
+                                    <td><a href="{% url 'admin_subscription_detail' subscription.id %}">{{ subscription.plan.name }}</a></td>
+                                    <td>{{ subscription.start_date|date:"M d, Y" }}</td>
+                                    <td>{{ subscription.end_date|date:"M d, Y" }}</td>
+                                    <td>
+                                        <span class="badge bg-{% if subscription.active %}success{% else %}danger{% endif %}">
+                                            {% if subscription.active %}Active{% else %}Inactive{% endif %}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center">No subscriptions found</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

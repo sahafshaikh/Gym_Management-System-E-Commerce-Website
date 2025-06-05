@@ -1,0 +1,39 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Edit Subscriber - GymWord Admin{% endblock %}
+
+{% block page_title %}Edit Subscriber{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Edit Subscriber</h1>
+        <a href="{% url 'admin_newsletter_list' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Subscribers
+        </a>
+    </div>
+
+    <!-- Edit Subscriber Form -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Subscriber Information</h6>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ newsletter.email }}" required>
+                </div>
+                
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">Update Subscriber</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

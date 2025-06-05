@@ -1,0 +1,188 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Add Subscription - Admin Panel{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Add Subscription</h1>
+        <a href="{% url 'admin_subscriptions' %}" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
+            <i class="fas fa-arrow-left fa-sm text-white-50"></i> Back to Subscriptions
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Subscription Information</h6>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="form-group">
+                            <label for="user">User</label>
+                            <select class="form-control" id="user" name="user" required>
+                                <option value="">Select User</option>
+                                {% for user in users %}
+                                <option value="{{ user.id }}">{{ user.username }} ({{ user.email }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="plan">Plan</label>
+                            <select class="form-control" id="plan" name="plan" required>
+                                <option value="">Select Plan</option>
+                                {% for plan in plans %}
+                                <option value="{{ plan.id }}" data-duration="{{ plan.duration }}">{{ plan.name }} (₹{{ plan.price }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="start_date">Start Date</label>
+                            <input type="date" class="form-control" id="start_date" name="start_date" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="end_date">End Date</label>
+                            <input type="date" class="form-control" id="end_date" name="end_date" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="status">Status</label>
+                            <select class="form-control" id="status" name="status" required>
+                                <option value="active">Active</option>
+                                <option value="expired">Expired</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="payment_method">Payment Method</label>
+                            <select class="form-control" id="payment_method" name="payment_method" required>
+                                <option value="card">Credit/Debit Card</option>
+                                <option value="upi">UPI</option>
+                                <option value="cash">Cash</option>
+                                <option value="bank_transfer">Bank Transfer</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Add Subscription</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Plan Details</h6>
+                </div>
+                <div class="card-body">
+                    <div id="plan-details">
+                        <p class="text-center text-muted">Select a plan to see details</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Help</h6>
+                </div>
+                <div class="card-body">
+                    <p><strong>Start Date:</strong> The date when the subscription begins.</p>
+                    <p><strong>End Date:</strong> The date when the subscription expires.</p>
+                    <p><strong>Status:</strong></p>
+                    <ul>
+                        <li><strong>Active:</strong> Subscription is currently active.</li>
+                        <li><strong>Expired:</strong> Subscription has reached its end date.</li>
+                        <li><strong>Cancelled:</strong> Subscription was cancelled before the end date.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const planSelect = document.getElementById('plan');
+        const startDateInput = document.getElementById('start_date');
+        const endDateInput = document.getElementById('end_date');
+        const planDetailsDiv = document.getElementById('plan-details');
+        
+        // Set default start date to today
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0];
+        startDateInput.value = formattedDate;
+        
+        // Update end date based on plan duration when plan changes
+        planSelect.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const planId = this.value;
+            
+            if (planId) {
+                // Get plan duration
+                const duration = selectedOption.getAttribute('data-duration');
+                
+                // Calculate end date based on duration
+                const startDate = new Date(startDateInput.value);
+                let endDate = new Date(startDate);
+                
+                if (duration === 'monthly') {
+                    endDate.setMonth(endDate.getMonth() + 1);
+                } else if (duration === 'quarterly') {
+                    endDate.setMonth(endDate.getMonth() + 3);
+                } else if (duration === 'half_yearly') {
+                    endDate.setMonth(endDate.getMonth() + 6);
+                } else if (duration === 'yearly') {  {
+                    endDate.setMonth(endDate.getMonth() + 6);
+                } else if (duration === 'yearly') {
+                    endDate.setMonth(endDate.getMonth() + 12);
+                }
+                
+                // Format end date for input
+                const formattedEndDate = endDate.toISOString().split('T')[0];
+                endDateInput.value = formattedEndDate;
+                
+                // Fetch plan details
+                fetch(`/admin/api/plan-details/${planId}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        planDetailsDiv.innerHTML = `
+                            <h5>${data.name}</h5>
+                            <p class="mb-1"><strong>Price:</strong> ₹${data.price}</p>
+                            <p class="mb-1"><strong>Duration:</strong> ${data.duration}</p>
+                            <p class="mb-3"><strong>Features:</strong></p>
+                            <ul class="pl-3">
+                                ${data.features.map(feature => `<li>${feature}</li>`).join('')}
+                            </ul>
+                        `;
+                    })
+                    .catch(error => {
+                        planDetailsDiv.innerHTML = `
+                            <h5>${selectedOption.textContent}</h5>
+                            <p>Duration: ${duration}</p>
+                        `;
+                    });
+            } else {
+                planDetailsDiv.innerHTML = '<p class="text-center text-muted">Select a plan to see details</p>';
+                endDateInput.value = '';
+            }
+        });
+        
+        // Update end date when start date changes
+        startDateInput.addEventListener('change', function() {
+            if (planSelect.value) {
+                planSelect.dispatchEvent(new Event('change'));
+            }
+        });
+    });
+</script>
+{% endblock %}
+

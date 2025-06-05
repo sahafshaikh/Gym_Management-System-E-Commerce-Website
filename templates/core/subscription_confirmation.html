@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Subscription Confirmation - GymWord{% endblock %}
+
+{% block content %}
+<section class="subscription-confirmation-section">
+    <div class="container">
+        <h2>Subscription Confirmation</h2>
+        
+        <div class="confirmation-message">
+            <div class="success-icon">✓</div>
+            <h3>Thank You for Your Subscription!</h3>
+            <p>Your subscription has been activated successfully.</p>
+        </div>
+        
+        <div class="subscription-details">
+            <h3>Subscription Details</h3>
+            <p><strong>Plan:</strong> {{ subscription.plan.name }}</p>
+            <p><strong>Price:</strong> ₹{{ subscription.plan.price }}/month</p>
+            <p><strong>Start Date:</strong> {{ subscription.start_date|date:"F d, Y" }}</p>
+            <p><strong>End Date:</strong> {{ subscription.end_date|date:"F d, Y" }}</p>
+            <p><strong>Status:</strong> {% if subscription.active %}Active{% else %}Inactive{% endif %}</p>
+        </div>
+        
+        <div class="subscription-actions">
+            <a href="{% url 'subscriptions' %}" class="btn btn-secondary">View All Subscriptions</a>
+            <a href="{% url 'home' %}" class="btn btn-primary">Back to Home</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

@@ -1,0 +1,458 @@
+<!-- gymapp/templates/book_class.html -->
+{% extends 'base.html' %}
+
+{% block title %}Book a Class - GymWord{% endblock %}
+
+{% block extra_css %}
+
+{% endblock %}
+
+{% block content %}
+<style>
+    /* Base styles */
+    body {
+        background: #b22222; /* Solid red background */
+        color: #fff;
+        font-family: 'Arial', sans-serif;
+        overflow-x: hidden;
+        margin: 0;
+        padding: 0;
+    }
+
+    .booking-section {
+        padding: 80px 0;
+        min-height: 100vh;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .booking-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        animation: subtlePulse 8s infinite ease-in-out;
+        z-index: 0;
+    }
+
+    .particle-container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .coming-soon-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        text-align: center;
+        padding: 60px;
+        background: rgba(0, 0, 0, 0.9);
+        border-radius: 30px;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
+        position: relative;
+        border: 2px solid #fff;
+        z-index: 2;
+        animation: gentleFloat 4s ease-in-out infinite;
+    }
+
+    .coming-soon-title {
+        font-size: 4rem;
+        margin-bottom: 25px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        color: #fff;
+        animation: subtleGlow 3s infinite alternate;
+    }
+
+    .coming-soon-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 120px;
+        height: 3px;
+        background: #fff;
+        border-radius: 2px;
+        animation: subtleExpand 2s infinite ease-in-out;
+    }
+
+    .coming-soon-subtitle {
+        font-size: 2rem;
+        color: #fff;
+        margin-bottom: 30px;
+        font-weight: 500;
+        animation: fadeInText 1s ease-out forwards;
+    }
+
+    .coming-soon-message {
+        font-size: 1.3rem;
+        color: #ddd;
+        line-height: 1.7;
+        margin-bottom: 40px;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+        animation: fadeInText 1s ease-out 0.5s forwards;
+        padding: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
+    }
+
+    .feature-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+        margin-bottom: 50px;
+    }
+
+    .feature-item {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .feature-item::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: rgba(255, 255, 255, 0.05);
+        transform: rotate(30deg);
+        transition: all 0.5s ease;
+        opacity: 0;
+    }
+
+    .feature-item:hover::before {
+        opacity: 1;
+        top: -20%;
+        left: -20%;
+    }
+
+    .feature-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    }
+
+    .feature-item i {
+        font-size: 3rem;
+        color: #fff;
+        margin-bottom: 20px;
+        display: block;
+        transition: all 0.3s ease;
+    }
+
+    .feature-item:hover i {
+        transform: scale(1.1);
+    }
+
+    .feature-item h3 {
+        font-size: 1.5rem;
+        color: #fff;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .feature-item p {
+        font-size: 1rem;
+        color: #ccc;
+    }
+
+    .class-types {
+        margin: 50px 0;
+        padding: 30px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .class-types h2 {
+        font-size: 2.2rem;
+        color: #fff;
+        margin-bottom: 25px;
+        animation: fadeInText 1s ease-out forwards;
+    }
+
+    .class-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .class-item {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        border-radius: 15px;
+        width: 180px;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .class-item:hover {
+        transform: translateY(-3px);
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .class-item h4 {
+        font-size: 1.2rem;
+        color: #fff;
+        margin-bottom: 8px;
+    }
+
+    .class-item p {
+        font-size: 0.9rem;
+        color: #ddd;
+    }
+
+    .stay-tuned {
+        font-size: 1.5rem;
+        color: #b22222;
+        font-weight: 700;
+        padding: 20px 40px;
+        background: #fff;
+        border-radius: 50px;
+        display: inline-block;
+        transition: all 0.4s ease;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stay-tuned::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: rgba(178, 34, 34, 0.2);
+        transition: all 0.5s ease;
+    }
+
+    .stay-tuned:hover::before {
+        left: 100%;
+    }
+
+    .stay-tuned:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Subtle Animations */
+    @keyframes subtlePulse {
+        0% { opacity: 0.3; transform: scale(1); }
+        50% { opacity: 0.5; transform: scale(1.05); }
+        100% { opacity: 0.3; transform: scale(1); }
+    }
+
+    @keyframes gentleFloat {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+    }
+
+    @keyframes subtleGlow {
+        0% { text-shadow: 0 0 5px rgba(255, 255, 255, 0.3); }
+        100% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+    }
+
+    @keyframes subtleExpand {
+        0%, 100% { width: 100px; }
+        50% { width: 140px; }
+    }
+
+    @keyframes fadeInText {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+        .coming-soon-title { font-size: 3rem; }
+        .coming-soon-subtitle { font-size: 1.6rem; }
+        .coming-soon-message { font-size: 1.1rem; }
+        .feature-list { grid-template-columns: 1fr; }
+        .coming-soon-container { padding: 40px; }
+        .stay-tuned { font-size: 1.3rem; padding: 15px 30px; }
+        .class-types { padding: 20px; }
+        .class-list { flex-direction: column; align-items: center; }
+        .class-item { width: 100%; max-width: 250px; }
+    }
+</style>
+<!-- Debug Message -->
+<div style="color: #fff; text-align: center; padding: 10px;">
+    DEBUG: Book Class Template Loaded - {{ current_time }}
+</div>
+
+<!-- Booking Section -->
+<section class="booking-section">
+    <div class="particle-container" id="particles"></div>
+    <div class="container">
+        <div class="coming-soon-container">
+            <h1 class="coming-soon-title">Classes Coming Soon</h1>
+            <h2 class="coming-soon-subtitle">Your Fitness Journey Awaits</h2>
+            <p class="coming-soon-message">
+                Get ready for an exceptional workout experience! Our class booking system is launching soon, bringing you top-tier fitness sessions to elevate your strength and stamina.
+            </p>
+            
+            <div class="feature-list">
+                <div class="feature-item">
+                    <i class="fas fa-clock"></i>
+                    <h3>Flexible Timing</h3>
+                    <p>Book classes that suit your busy schedule.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-heartbeat"></i>
+                    <h3>Varied Workouts</h3>
+                    <p>Choose from cardio, strength, and more.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-trophy"></i>
+                    <h3>Pro Trainers</h3>
+                    <p>Train with the best in fitness.</p>
+                </div>
+            </div>
+
+            <!-- Class Types Section -->
+            <div class="class-types">
+                <h2>Upcoming Classes</h2>
+                <div class="class-list">
+                    <div class="class-item">
+                        <h4>Power Yoga</h4>
+                        <p>Enhance flexibility and calm your mind.</p>
+                    </div>
+                    <div class="class-item">
+                        <h4>HIIT Blast</h4>
+                        <p>Maximize calorie burn in less time.</p>
+                    </div>
+                    <div class="class-item">
+                        <h4>Strength Core</h4>
+                        <p>Build muscle with focused exercises.</p>
+                    </div>
+                    <div class="class-item">
+                        <h4>Spin Energy</h4>
+                        <p>Boost cardio with high-energy cycling.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <p class="stay-tuned">Stay Tuned for the Launch!</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    console.log("JavaScript Loaded - Subtle Animation Version - " + new Date());
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("DOM Loaded - " + new Date());
+
+        // Feature and Class Item Animations
+        const items = document.querySelectorAll('.feature-item, .class-item');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    entry.target.style.transition = `all 0.5s ease ${index * 0.1}s`;
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        items.forEach(item => {
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(15px)';
+            observer.observe(item);
+        });
+
+        // Stay Tuned Button Effect
+        const stayTuned = document.querySelector('.stay-tuned');
+        let pulseCount = 0;
+        const pulseInterval = setInterval(() => {
+            stayTuned.style.transform = 'scale(1.03)';
+            stayTuned.style.boxShadow = '0 12px 22px rgba(0, 0, 0, 0.35)';
+            setTimeout(() => {
+                stayTuned.style.transform = 'scale(1)';
+                stayTuned.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.3)';
+            }, 300);
+            pulseCount++;
+            if (pulseCount > 5) clearInterval(pulseInterval);
+        }, 2000);
+
+        // Subtle Particle Effect
+        const particleContainer = document.getElementById('particles');
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.style.cssText = `
+                position: absolute;
+                width: 3px;
+                height: 3px;
+                background: rgba(255, 255, 255, ${Math.random() * 0.4 + 0.2});
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 1;
+            `;
+            
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight;
+            particle.style.left = `${x}px`;
+            particle.style.top = `${y}px`;
+            
+            particleContainer.appendChild(particle);
+            
+            const animation = particle.animate([
+                { transform: 'translate(0, 0)', opacity: 0.6 },
+                { transform: `translate(${(Math.random() - 0.5) * 30}px, ${(Math.random() - 0.5) * 30}px)`, opacity: 0 }
+            ], {
+                duration: Math.random() * 1500 + 1000,
+                easing: 'ease-out'
+            });
+            
+            animation.onfinish = () => particle.remove();
+        }
+
+        setInterval(createParticle, 300);
+        
+        // Subtle Mouse Trail Effect
+        document.addEventListener('mousemove', (e) => {
+            const trail = document.createElement('div');
+            trail.style.cssText = `
+                position: absolute;
+                width: 6px;
+                height: 6px;
+                background: rgba(255, 255, 255, 0.3);
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 1;
+                left: ${e.pageX}px;
+                top: ${e.pageY}px;
+            `;
+            particleContainer.appendChild(trail);
+            
+            trail.animate([
+                { transform: 'scale(1)', opacity: 0.3 },
+                { transform: 'scale(0.5)', opacity: 0 }
+            ], {
+                duration: 500,
+                easing: 'ease-out'
+            }).onfinish = () => trail.remove();
+        });
+    });
+</script>
+{% endblock %}

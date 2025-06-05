@@ -1,0 +1,202 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}{{ plan.name }} - GymWord{% endblock %}
+
+{% block content %}
+<section class="plan-detail-section py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="plan-detail-card">
+                    <div class="card shadow">
+                        <div class="card-header bg-primary text-white">
+                            <h2 class="mb-0">{{ plan.name }}</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="plan-detail-header">
+                                <h2>{{ plan.name }}</h2>
+                                <div class="plan-detail-price">₹{{ plan.price }}</div>
+                                <div class="plan-detail-duration">{{ plan.duration }} {{ plan.duration_unit }}</div>
+                            </div>
+
+                            <div class="plan-detail-description">
+                                <h4>Description</h4>
+                                <p>{{ plan.description }}</p>
+                            </div>
+
+                            <div class="plan-detail-features">
+                                <h4>Features</h4>
+                                <div class="row">
+                                    {% for feature in plan.features.all %}
+                                    <div class="col-md-6">
+                                        <div class="plan-detail-feature">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>{{ feature.description }}</span>
+                                        </div>
+                                    </div>
+                                    {% empty %}
+                                    <div class="col-md-6">
+                                        <div class="plan-detail-feature">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Access to gym equipment</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="plan-detail-feature">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Locker room access</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="plan-detail-feature">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Fitness assessment</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="plan-detail-feature">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Workout plan</span>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            {% if plan.terms_conditions %}
+                            <div class="plan-detail-terms mb-4">
+                                <h4>Terms & Conditions</h4>
+                                <p>{{ plan.terms_conditions }}</p>
+                            </div>
+                            {% endif %}
+
+                            <div class="plan-detail-cta">
+                                {% if user.is_authenticated %}
+                                <a href="{% url 'subscribe_plan' plan.id %}" class="btn btn-primary btn-lg">Book Now</a>
+                                {% else %}
+                                <p class="mb-3">Please login to subscribe to this plan</p>
+                                <a href="{% url 'login' %}?next={% url 'subscribe_plan' plan.id %}" class="btn btn-primary">Login to Subscribe</a>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="text-center">
+                                <button class="btn btn-success btn-lg add-to-cart-plan" data-plan-id="{{ plan.id }}">
+                                    <i class="fas fa-shopping-cart mr-2"></i> Book Now
+                                </button>
+                                <a href="{% url 'home' %}#plans" class="btn btn-outline-primary btn-lg ml-2">
+                                    <i class="fas fa-arrow-left mr-2"></i> Back to Plans
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Plans Section -->
+<section class="related-plans-section py-5 bg-light">
+    <div class="container">
+        <h3 class="text-center mb-4">Other Plans You Might Like</h3>
+        <div class="row">
+            {% for related_plan in related_plans %}
+            {% if related_plan.id != plan.id %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="plan-card">
+                    <div class="plan-header">
+                        <h3>{{ related_plan.name }}</h3>
+                        <div class="plan-price">
+                            <span class="currency">$</span>
+                            <span class="amount">{{ related_plan.price }}</span>
+                            <span class="period">/month</span>
+                        </div>
+                    </div>
+                    <div class="plan-body">
+                        <ul class="plan-features">
+                            {% for feature in related_plan.planfeature_set.all|slice:":3" %}
+                            <li><i class="fas fa-check"></i> {{ feature.feature }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="plan-footer">
+                        <a href="{% url 'plan_detail' related_plan.id %}" class="btn btn-primary">View Details</a>
+                    </div>  related_plan.id %}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% empty %}
+            <div class="col-12 text-center">
+                <p>No other plans available at the moment.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add to cart functionality for plans
+        const addToCartPlanButtons = document.querySelectorAll('.add-to-cart-plan');
+        addToCartPlanButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const planId = this.dataset.planId;
+                addPlanToCart(planId);
+            });
+        });
+        
+        // Function to add plan to cart
+        function addPlanToCart(planId) {
+            fetch('/cart/add-plan/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: `plan_id=${planId}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateCartCount(data.cart_count);
+                    alert('Plan added to cart! Proceed to checkout to complete your booking.');
+                    window.location.href = '/cart/';
+                } else {
+                    alert('Error adding plan to cart: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error adding plan to cart. Please try again.');
+            });
+        }
+        
+        // Function to update cart count in navbar
+        function updateCartCount(count) {
+            const cartCountElement = document.getElementById('cartCount');
+            if (cartCountElement) {
+                cartCountElement.textContent = count;
+            }
+        }
+        
+        // Function to get CSRF token from cookies
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+</script>
+{% endblock %}
+

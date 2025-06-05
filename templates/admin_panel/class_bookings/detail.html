@@ -1,0 +1,95 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Booking Details - GymWord Admin{% endblock %}
+
+{% block page_title %}Booking Details{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Booking #{{ booking.id }}</h1>
+        <div>
+            <a href="{% url 'admin_class_booking_edit' booking.id %}" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+            <a href="{% url 'admin_class_booking_list' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Bookings
+            </a>
+        </div>
+    </div>
+
+    <!-- Booking Details -->
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Booking Information</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>ID:</strong> {{ booking.id }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>User:</strong> 
+                        <a href="{% url 'admin_user_detail' booking.user.id %}">{{ booking.user.username }}</a>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Class:</strong> {{ booking.class_schedule.gym_class.name }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Day & Time:</strong> {{ booking.class_schedule.day }} at {{ booking.class_schedule.time }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Booking Date:</strong> {{ booking.booking_date|date:"F d, Y" }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Status:</strong>
+                        <span class="badge bg-{% if booking.status == 'Booked' %}primary{% elif booking.status == 'Cancelled' %}danger{% elif booking.status == 'Completed' %}success{% else %}secondary{% endif %}">
+                            {{ booking.status }}
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Created At:</strong> {{ booking.created_at|date:"F d, Y H:i" }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Class Information</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Class Name:</strong> {{ booking.class_schedule.gym_class.name }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Description:</strong>
+                        <p>{{ booking.class_schedule.gym_class.description }}</p>
+                    </div>
+                    {% if booking.class_schedule.gym_class.image %}
+                    <div class="mb-3">
+                        <strong>Class Image:</strong>
+                        <div class="mt-2">
+                            <img src="{{ booking.class_schedule.gym_class.image.url }}" alt="{{ booking.class_schedule.gym_class.name }}" class="img-fluid rounded" style="max-height: 200px;">
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="text-end mt-4">
+        <form action="{% url 'admin_class_booking_delete' booking.id %}" method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-delete">
+                <i class="fas fa-trash"></i> Delete Booking
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+

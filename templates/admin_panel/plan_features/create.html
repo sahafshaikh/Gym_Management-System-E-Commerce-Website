@@ -1,0 +1,49 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Create Plan Feature - GymWord Admin{% endblock %}
+
+{% block page_title %}Create Plan Feature{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Create New Plan Feature</h1>
+        <a href="{% url 'admin_plan_feature_list' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Plan Features
+        </a>
+    </div>
+
+    <!-- Create Plan Feature Form -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Feature Information</h6>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="plan" class="form-label">Plan</label>
+                    <select class="form-select" id="plan" name="plan" required>
+                        <option value="">Select Plan</option>
+                        {% for plan in plans %}
+                        <option value="{{ plan.id }}">{{ plan.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="feature" class="form-label">Feature Description</label>
+                    <input type="text" class="form-control" id="feature" name="feature" required>
+                </div>
+                
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">Create Feature</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

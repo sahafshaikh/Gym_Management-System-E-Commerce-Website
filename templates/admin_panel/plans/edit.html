@@ -1,0 +1,117 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Edit Plan - GymWord Admin{% endblock %}
+
+{% block page_title %}Edit Plan{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Edit Plan: {{ plan.name }}</h1>
+        <a href="{% url 'admin_plan_list' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Plans
+        </a>
+    </div>
+
+    <!-- Edit Plan Form -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Plan Information</h6>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="name" class="form-label">Plan Name</label>
+                    <input type="text" class="form-control" id="name" name="name" value="{{ plan.name }}" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price (₹)</label>
+                    <input type="number" class="form-control" id="price" name="price" step="0.01" min="0" value="{{ plan.price }}" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="4" required>{{ plan.description }}</textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Features</label>
+                    <div id="featuresContainer" class="dynamic-form-fields">
+                        {% for feature in features %}
+                        <div class="dynamic-form-field">
+                            <input type="text" class="form-control" name="features[]" value="{{ feature.feature }}" required>
+                            <button type="button" class="btn btn-danger remove-field-btn">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        {% empty %}
+                        <div class="dynamic-form-field">
+                            <input type="text" class="form-control" name="features[]" placeholder="Enter a feature" required>
+                            <button type="button" class="btn btn-danger remove-field-btn">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="btn btn-secondary add-field-btn" data-container="featuresContainer" data-field-name="features">
+                        <i class="fas fa-plus"></i> Add Feature
+                    </button>
+                </div>
+                
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">Update Plan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize dynamic fields for features
+        const addFeatureBtn = document.querySelector('.add-field-btn');
+        if (addFeatureBtn) {
+            addFeatureBtn.addEventListener('click', function() {
+                const container = document.getElementById('featuresContainer');
+                const fieldDiv = document.createElement('div');
+                fieldDiv.className = 'dynamic-form-field';
+                
+                fieldDiv.innerHTML = `
+                    <input type="text" class="form-control" name="features[]" placeholder="Enter a feature" required>
+                    <button type="button" class="btn btn-danger remove-field-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                
+                container.appendChild(fieldDiv);
+                
+                // Add event listener to remove button
+                const removeBtn = fieldDiv.querySelector('.remove-field-btn');
+                if (removeBtn) {
+                    removeBtn.addEventListener('click', function() {
+                        container.removeChild(fieldDiv);
+                    });
+                }
+            });
+        }
+        
+        // Add event listeners to initial remove buttons
+        const removeButtons = document.querySelectorAll('.remove-field-btn');
+        removeButtons.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const fieldDiv = btn.closest('.dynamic-form-field');
+                if (fieldDiv && fieldDiv.parentNode) {
+                    fieldDiv.parentNode.removeChild(fieldDiv);
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
+

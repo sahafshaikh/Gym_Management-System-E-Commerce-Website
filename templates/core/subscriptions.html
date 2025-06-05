@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+
+{% block title %}Your Subscriptions - GymWord{% endblock %}
+
+{% block content %}
+<style>
+    .subscriptions-section {
+        padding: 40px 0;
+        background-color: #f5f5f5;
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    
+    h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #333;
+        font-size: 2rem;
+    }
+    
+    .subscriptions-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+    }
+    
+    .subscription-card {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
+    }
+    
+    .subscription-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .subscription-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+    }
+    
+    .subscription-header h3 {
+        margin: 0;
+        color: #2c3e50;
+        font-size: 1.5rem;
+    }
+    
+    .subscription-status {
+        padding: 5px 10px;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+    
+    .subscription-status.active {
+        background-color: #e6ffe6;
+        color: #006600;
+    }
+    
+    .subscription-status.inactive {
+        background-color: #ffe6e6;
+        color: #660000;
+    }
+    
+    .subscription-info {
+        margin: 15px 0;
+        color: #666;
+    }
+    
+    .subscription-info p {
+        margin: 8px 0;
+    }
+    
+    .subscription-info strong {
+        color: #333;
+    }
+    
+    .subscription-features {
+        margin-top: 15px;
+    }
+    
+    .subscription-features h4 {
+        color: #333;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+    }
+    
+    .subscription-features ul {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .subscription-features li {
+        padding: 5px 0;
+        color: #555;
+        position: relative;
+        padding-left: 20px;
+    }
+    
+    .subscription-features li:before {
+        content: "✓";
+        color: #27ae60;
+        position: absolute;
+        left: 0;
+    }
+    
+    .empty-subscriptions {
+        text-align: center;
+        padding: 40px;
+        background: white;
+        border-radius: 8px;
+        margin: 20px auto;
+        max-width: 500px;
+    }
+    
+    .empty-subscriptions p {
+        color: #666;
+        margin-bottom: 20px;
+        font-size: 1.1rem;
+    }
+    
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.2s;
+    }
+    
+    .btn-primary {
+        background-color: #ff1900;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background-color: #649186;
+    }
+    </style>
+<section class="subscriptions-section">
+    <div class="container">
+        <h2>Your Subscriptions</h2>
+        
+        {% if subscriptions %}
+        <div class="subscriptions-list">
+            {% for subscription in subscriptions %}
+            <div class="subscription-card">
+                <div class="subscription-header">
+                    <h3>{{ subscription.plan.name }}</h3>
+                    <p class="subscription-status {% if subscription.active %}active{% else %}inactive{% endif %}">
+                        {% if subscription.active %}Active{% else %}Inactive{% endif %}
+                    </p>
+                </div>
+                <div class="subscription-info">
+                    <p><strong>Price:</strong> ₹{{ subscription.plan.price }}/month</p>
+                    <p><strong>Start Date:</strong> {{ subscription.start_date|date:"F d, Y" }}</p>
+                    <p><strong>End Date:</strong> {{ subscription.end_date|date:"F d, Y" }}</p>
+                </div>
+                <div class="subscription-features">
+                    <h4>Features</h4>
+                    <ul>
+                        {% for feature in subscription.plan.features.all %}
+                        <li>{{ feature.feature }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-subscriptions">
+            <p>You don't have any active subscriptions.</p>
+            <a href="{% url 'plans' %}" class="btn btn-primary">View Plans</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+

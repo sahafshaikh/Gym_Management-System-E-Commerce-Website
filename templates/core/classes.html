@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Classes - GymWord{% endblock %}
+
+{% block content %}
+<section class="classes-section">
+    <div class="container">
+        <h2>Our Classes</h2>
+        
+        <div class="classes">
+            {% for class in classes %}
+            <div class="class">
+                {% if class.image %}
+                <img src="{{ class.image.url }}" alt="{{ class.name }}">
+                {% else %}
+                <img src="https://source.unsplash.com/800x600/?fitness" alt="{{ class.name }}">
+                {% endif %}
+                <h3>{{ class.name }}</h3>
+                <p>{{ class.description }}</p>
+                <a href="{% url 'booking' %}" class="btn btn-primary">Book Now</a>
+            </div>
+            {% empty %}
+            <p>No classes available at the moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+

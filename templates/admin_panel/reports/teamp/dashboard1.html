@@ -1,0 +1,285 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Reports Dashboard - GymWord Admin{% endblock %}
+
+{% block page_title %}Reports Dashboard{% endblock %}
+
+{% block extra_css %}
+<style>
+    .report-card {
+        transition: all 0.3s ease;
+    }
+    
+    .report-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    .chart-container {
+        height: 300px;
+        margin-bottom: 20px;
+    }
+    
+    .date-filter {
+        margin-bottom: 20px;
+    }
+    
+    .report-links a {
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h5 class="card-title">Reports Dashboard</h5>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <div class="date-filter">
+                            <form method="GET" class="d-inline-flex">
+                                <select name="date_range" class="form-select me-2" onchange="this.form.submit()">
+                                    <option value="7" {% if date_range == '7' %}selected{% endif %}>Last 7 days</option>
+                                    <option value="30" {% if date_range == '30' %}selected{% endif %}>Last 30 days</option>
+                                    <option value="90" {% if date_range == '90' %}selected{% endif %}>Last 90 days</option>
+                                    <option value="365" {% if date_range == '365' %}selected{% endif %}>Last year</option>
+                                </select>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card report-card bg-primary text-white mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Users</h5>
+                                <h2 class="mb-0">{{ user_count }}</h2>
+                            </div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a href="{% url 'admin_user_report' %}" class="text-white">View Details</a>
+                                <div class="small text-white"><i class="fas fa-users"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card report-card bg-success text-white mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Products</h5>
+                                <h2 class="mb-0">{{ product_count }}</h2>
+                            </div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a href="{% url 'admin_product_list' %}" class="text-white">View Details</a>
+                                <div class="small text-white"><i class="fas fa-box"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card report-card bg-warning text-white mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Orders</h5>
+                                <h2 class="mb-0">{{ order_count }}</h2>
+                            </div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a href="{% url 'admin_sales_report' %}" class="text-white">View Details</a>
+                                <div class="small text-white"><i class="fas fa-shopping-cart"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card report-card bg-danger text-white mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Subscriptions</h5>
+                                <h2 class="mb-0">{{ subscription_count }}</h2>
+                            </div>
+                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                <a href="{% url 'admin_subscription_report' %}" class="text-white">View Details</a>
+                                <div class="small text-white"><i class="fas fa-credit-card"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <div class="row align-items-center">
+                                    <div class="col-md-6">
+                                        <h5 class="card-title">Sales Overview</h5>
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        <a href="{% url 'admin_export_report' 'sales' %}" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-download"></i> Export Data
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="salesChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="card-title">Top Selling Products</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Product</th>
+                                                <th>Quantity Sold</th>
+                                                <th>Total Sales</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for product in top_products %}
+                                            <tr>
+                                                <td>{{ product.product__name }}</td>
+                                                <td>{{ product.total_quantity }}</td>
+                                                <td>₹{{ product.total_sales|floatformat:2 }}</td>
+                                            </tr>
+                                            {% empty %}
+                                            <tr>
+                                                <td colspan="3" class="text-center">No data available</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="card-title">Top Subscribed Plans</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Plan</th>
+                                                <th>Subscriptions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for plan in top_plans %}
+                                            <tr>
+                                                <td>{{ plan.plan__name }}</td>
+                                                <td>{{ plan.count }}</td>
+                                            </tr>
+                                            {% empty %}
+                                            <tr>
+                                                <td colspan="2" class="text-center">No data available</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">Detailed Reports</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="report-links d-flex flex-wrap">
+                                    <a href="{% url 'admin_user_report' %}" class="btn btn-outline-primary">
+                                        <i class="fas fa-users"></i> User Report
+                                    </a>
+                                    <a href="{% url 'admin_sales_report' %}" class="btn btn-outline-success">
+                                        <i class="fas fa-chart-line"></i> Sales Report
+                                    </a>
+                                    <a href="{% url 'admin_subscription_report' %}" class="btn btn-outline-info">
+                                        <i class="fas fa-credit-card"></i> Subscription Report
+                                    </a>
+                                    <a href="{% url 'admin_booking_report' %}" class="btn btn-outline-warning">
+                                        <i class="fas fa-calendar-check"></i> Booking Report
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Sales Chart
+        const salesCtx = document.getElementById('salesChart').getContext('2d');
+        const salesChart = new Chart(salesCtx, {
+            type: 'line',
+            data: {
+                labels: {{ dates|safe }},
+                datasets: [{
+                    label: 'Sales (₹)',
+                    data: {{ sales|safe }},
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '₹' + value;
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return '₹' + context.parsed.y;
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Sales Trend'
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
+

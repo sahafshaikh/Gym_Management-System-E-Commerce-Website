@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}GymWord Admin{% endblock %}</title>
+    
+    <!--&lt;!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!--&lt;!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!--&lt;!-- Chart.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.css">
+    
+    <!--&lt;!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/admin/css/style.css">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="admin-container">
+       <!-- &lt;!-- Sidebar -->
+        {% if user.is_authenticated and user.is_staff %}
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3>GymWord Admin</h3>
+                <button class="btn-toggle-sidebar" id="toggleSidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <div class="sidebar-menu">
+                <ul>
+                    <li><a href="{% url 'admin_dashboard' %}" {% if request.path == '/custom-admin/' %}class="active"{% endif %}><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    
+                    <li class="menu-header">Users</li>
+                    <li><a href="{% url 'admin_user_list' %}" {% if '/custom-admin/users/' in request.path %}class="active"{% endif %}><i class="fas fa-users"></i> Users</a></li>
+                    
+                    <li class="menu-header">Products</li>
+                    <li><a href="{% url 'admin_category_list' %}" {% if '/custom-admin/categories/' in request.path %}class="active"{% endif %}><i class="fas fa-tags"></i> Categories</a></li>
+                    <li><a href="{% url 'admin_product_list' %}" {% if '/custom-admin/products/' in request.path %}class="active"{% endif %}><i class="fas fa-box"></i> Products</a></li>
+                    
+                    <li class="menu-header">Plans</li>
+                    <li><a href="{% url 'admin_plan_list' %}" {% if '/custom-admin/plans/' in request.path %}class="active"{% endif %}><i class="fas fa-clipboard-list"></i> Plans</a></li>
+                    <li><a href="{% url 'admin_plan_feature_list' %}" {% if '/custom-admin/plan-features/' in request.path %}class="active"{% endif %}><i class="fas fa-list-ul"></i> Plan Features</a></li>
+                    <li><a href="{% url 'admin_subscription_list' %}" {% if '/custom-admin/subscriptions/' in request.path %}class="active"{% endif %}><i class="fas fa-credit-card"></i> Subscriptions</a></li>
+                    
+                    
+                    <li class="menu-header">Classes</li>
+                    <li><a href="{% url 'admin_team_member_list' %}" {% if '/custom-admin/team-members/' in request.path %}class="active"{% endif %}><i class="fas fa-user-friends"></i> Team Members</a></li>
+                    <li><a href="{% url 'admin_gym_class_list' %}" {% if '/custom-admin/gym-classes/' in request.path %}class="active"{% endif %}><i class="fas fa-dumbbell"></i> Gym Classes</a></li>
+                    <li><a href="{% url 'admin_class_schedule_list' %}" {% if '/custom-admin/class-schedules/' in request.path %}class="active"{% endif %}><i class="fas fa-calendar-alt"></i> Class Schedules</a></li>
+                    <li><a href="{% url 'admin_class_booking_list' %}" {% if '/custom-admin/class-bookings/' in request.path %}class="active"{% endif %}><i class="fas fa-calendar-check"></i> Class Bookings</a></li>
+                    
+                    <li class="menu-header">Workouts</li>
+                    <li><a href="{% url 'admin_workout_list' %}" {% if '/custom-admin/workouts/' in request.path %}class="active"{% endif %}><i class="fas fa-running"></i> Workouts</a></li>
+                    
+                    <li class="menu-header">Orders</li>
+                    <li><a href="{% url 'admin_order_list' %}" {% if '/custom-admin/orders/' in request.path %}class="active"{% endif %}><i class="fas fa-shopping-cart"></i> Orders</a></li>
+                    
+                    <li class="menu-header">Content</li>
+                    <li><a href="{% url 'admin_blog_post_list' %}" {% if '/custom-admin/blog-posts/' in request.path %}class="active"{% endif %}><i class="fas fa-blog"></i> Blog Posts</a></li>
+                    <li><a href="{% url 'admin_newsletter_list' %}" {% if '/custom-admin/newsletters/' in request.path %}class="active"{% endif %}><i class="fas fa-envelope"></i> Newsletter</a></li>
+                    <li><a href="{% url 'admin_contact_message_list' %}" {% if '/custom-admin/contact-messages/' in request.path %}class="active"{% endif %}><i class="fas fa-comment"></i> Contact Messages</a></li>
+                    
+                    <li class="menu-header">Reports</li>
+                    <li><a href="{% url 'admin_reports_dashboard' %}" {% if '/custom-admin/reports/' in request.path %}class="active"{% endif %}><i class="fas fa-chart-bar"></i> Reports</a></li>
+                    <li><a href="{% url 'admin_user_report' %}" {% if '/custom-admin/reports/users/' in request.path %}class="active"{% endif %}><i class="fas fa-user-chart"></i> User Reports</a></li>
+                    <li><a href="{% url 'admin_sales_report' %}" {% if '/custom-admin/reports/sales/' in request.path %}class="active"{% endif %}><i class="fas fa-chart-line"></i> Sales Reports</a></li>
+                    
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+        
+       <!-- &lt;!-- Main Content -->
+        <div class="main-content" id="mainContent">
+           <!-- &lt;!-- Navbar -->
+            <nav class="navbar navbar-expand-lg">
+                <div class="container-fluid">
+                    {% if user.is_authenticated and user.is_staff %}
+                    <button class="navbar-toggler" type="button" id="mobileToggleSidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    {% endif %}
+                    
+                    <div class="navbar-brand">
+                        {% block page_title %}GymWord Admin{% endblock %}
+                    </div>
+                    
+                    <div class="navbar-nav ms-auto">
+                        {% if user.is_authenticated and user.is_staff %}
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle"></i> {{ user.username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="{% url 'admin_dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'home' %}" target="_blank"><i class="fas fa-external-link-alt"></i> View Site</a></li>
+                                <li><a class="dropdown-item" href="{% url 'admin_logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                            </ul>
+                        </div>
+                        {% else %}
+                        <div class="nav-item">
+                            <a class="nav-link" href="{% url 'admin_login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </nav>
+            
+           <!-- &lt;!-- Messages -->
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+           <!-- &lt;!-- Content -->
+            <div class="content">
+                {% block content %}{% endblock %}
+            </div>
+            
+           <!-- &lt;!-- Footer -->
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>&copy; {% now "Y" %} GymWord Admin Panel</p>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <p>Version 1.0</p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    
+    <!--&lt;!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!--&lt;!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+   <!-- &lt;!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!--&lt;!-- Custom JS -->
+    <script src="/static/admin/js/script.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle sidebar
+            const toggleSidebar = document.getElementById('toggleSidebar');
+            const mobileToggleSidebar = document.getElementById('mobileToggleSidebar');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            
+            if (toggleSidebar && sidebar && mainContent) {
+                toggleSidebar.addEventListener('click', function() {
+                    sidebar.classList.toggle('collapsed');
+                    mainContent.classList.toggle('expanded');
+                });
+            }
+            
+            if (mobileToggleSidebar && sidebar) {
+                mobileToggleSidebar.addEventListener('click', function() {
+                    sidebar.classList.toggle('mobile-show');
+                });
+            }
+            
+            // Close alerts automatically after 5 seconds
+            setTimeout(function() {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(function(alert) {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                });
+            }, 5000);
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
+

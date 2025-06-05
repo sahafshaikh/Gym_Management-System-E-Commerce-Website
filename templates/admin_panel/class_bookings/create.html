@@ -1,0 +1,68 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Create Class Booking - GymWord Admin{% endblock %}
+
+{% block page_title %}Create Class Booking{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Create New Class Booking</h1>
+        <a href="{% url 'admin_class_booking_list' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Bookings
+        </a>
+    </div>
+
+    <!-- Create Class Booking Form -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Booking Information</h6>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="user" class="form-label">User</label>
+                    <select class="form-select" id="user" name="user" required>
+                        <option value="">Select User</option>
+                        {% for user in users %}
+                        <option value="{{ user.id }}">{{ user.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="class_schedule" class="form-label">Class Schedule</label>
+                    <select class="form-select" id="class_schedule" name="class_schedule" required>
+                        <option value="">Select Class Schedule</option>
+                        {% for schedule in class_schedules %}
+                        <option value="{{ schedule.id }}">{{ schedule.gym_class.name }} - {{ schedule.day }} at {{ schedule.time }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="booking_date" class="form-label">Booking Date</label>
+                    <input type="date" class="form-control" id="booking_date" name="booking_date" value="{{ today|date:'Y-m-d' }}" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-select" id="status" name="status" required>
+                        <option value="Booked" selected>Booked</option>
+                        <option value="Cancelled">Cancelled</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+                
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">Create Booking</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

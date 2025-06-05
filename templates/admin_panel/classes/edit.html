@@ -1,0 +1,138 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Edit Gym Class - Admin Panel{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Edit Gym Class</h1>
+        <a href="{% url 'admin_panel:classes' %}" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
+            <i class="fas fa-arrow-left fa-sm text-white-50 mr-2"></i>Back to Gym Classes
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Edit Class Information</h6>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="name">Class Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="name" name="name" value="{{ class.name }}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="category">Category <span class="text-danger">*</span></label>
+                                    <select class="form-control" id="category" name="category" required>
+                                        <option value="">Select Category</option>
+                                        <option value="Yoga" {% if class.category == "Yoga" %}selected{% endif %}>Yoga</option>
+                                        <option value="Cardio" {% if class.category == "Cardio" %}selected{% endif %}>Cardio</option>
+                                        <option value="Strength" {% if class.category == "Strength" %}selected{% endif %}>Strength</option>
+                                        <option value="HIIT" {% if class.category == "HIIT" %}selected{% endif %}>HIIT</option>
+                                        <option value="Dance" {% if class.category == "Dance" %}selected{% endif %}>Dance</option>
+                                        <option value="Pilates" {% if class.category == "Pilates" %}selected{% endif %}>Pilates</option>
+                                        <option value="Zumba" {% if class.category == "Zumba" %}selected{% endif %}>Zumba</option>
+                                        <option value="CrossFit" {% if class.category == "CrossFit" %}selected{% endif %}>CrossFit</option>
+                                        <option value="Other" {% if class.category == "Other" %}selected{% endif %}>Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="instructor">Instructor <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="instructor" name="instructor" value="{{ class.instructor }}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="image">Class Image</label>
+                                    <input type="file" class="form-control-file" id="image" name="image">
+                                    {% if class.image %}
+                                    <small class="form-text text-muted">Current image: {{ class.image.name }}</small>
+                                    <img src="{{ class.image.url }}" alt="Current class image" class="img-thumbnail mt-2" style="max-width: 200px;">
+                                    {% endif %}
+                                    <small class="form-text text-muted">Recommended size: 800x600 pixels</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="duration">Duration (minutes) <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" id="duration" name="duration" min="1" value="{{ class.duration }}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="capacity">Capacity <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" id="capacity" name="capacity" min="1" value="{{ class.capacity }}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="price">Price (₹) <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" id="price" name="price" min="0" step="0.01" value="{{ class.price }}" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="description">Description <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="description" name="description" rows="5" required>{{ class.description }}</textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="benefits">Benefits</label>
+                            <textarea class="form-control" id="benefits" name="benefits" rows="3">{{ class.benefits }}</textarea>
+                            <small class="form-text text-muted">Enter each benefit on a new line</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="requirements">Requirements</label>
+                            <textarea class="form-control" id="requirements" name="requirements" rows="3">{{ class.requirements }}</textarea>
+                            <small class="form-text text-muted">Enter each requirement on a new line</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="is_active" name="is_active" {% if class.is_active %}checked{% endif %}>
+                                <label class="custom-control-label" for="is_active">Active</label>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Update Class</button>
+                        <a href="{% url 'admin_panel:classes' %}" class="btn btn-secondary ml-2">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        // Initialize rich text editor for description
+        if (typeof ClassicEditor !== 'undefined') {
+            ClassicEditor
+                .create(document.querySelector('#description'))
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+    });
+</script>
+{% endblock %}

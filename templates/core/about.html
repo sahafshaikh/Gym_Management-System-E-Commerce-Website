@@ -1,0 +1,550 @@
+{% extends 'base.html' %}
+
+{% block title %}About Us - GymWord{% endblock %}
+
+{% block content %}
+<style>
+   
+/* style.css */
+
+/* General Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Page Header */
+.page-header {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?'); /* Default gym image */
+    background-size: cover;
+    background-position: center;
+    padding: 4rem 0;
+    color: rgb(21, 21, 21);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.breadcrumb {
+    background: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    list-style: none;
+}
+
+.breadcrumb-item a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.breadcrumb-item.active {
+    color: #ddd;
+}
+
+/* About Intro Section */
+.about-intro {
+    padding: 4rem 0;
+}
+
+.about-content {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.about-image img {
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+}
+
+.about-text h2 {
+    color: #080808;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+}
+
+/* Mission Section */
+.our-mission {
+    background: #f8f9fa;
+    padding: 4rem 0;
+}
+
+.mission-content {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.mission-image img {
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+}
+
+/* Values Section */
+.our-values {
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.value-item {
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.value-item:hover {
+    transform: translateY(-5px);
+}
+
+.value-icon {
+    font-size: 2rem;
+    color: #ff0000; /* Matches button theme */
+    margin-bottom: 1rem;
+}
+
+/* Team Section */
+.our-team {
+    padding: 4rem 0;
+    background: #f8f9fa;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.team-member {
+    text-align: center;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.team-member img {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 1rem;
+}
+
+.social-icons a {
+    color: #ff0000;
+    margin: 0 0.5rem;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #cc0000;
+}
+
+.team-cta {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+/* Testimonials Section */
+.testimonials {
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.testimonial-slider {
+    max-width: 800px;
+    margin: 2rem auto;
+}
+
+.testimonial {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin: 1rem;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.testimonial-author img {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    margin-right: 1rem;
+}
+
+/* CTA Section */
+.cta-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?'); /* Default gym CTA image */
+    background-size: cover;
+    background-position: center;
+    padding: 4rem 0;
+    text-align: center;
+    color: rgb(0, 0, 0);
+}
+
+.cta-section h2 {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-size: 2rem;
+}
+
+.cta-buttons {
+    margin-top: 2rem;
+}
+
+/* Button Styles */
+.btn-primary, .btn-secondary {
+    background: #ab0101;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 5px;
+    color: rgb(224, 40, 40);
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background: #241515;
+    transform: scale(1.05);
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 2px solid #241515;
+}
+
+.btn-secondary:hover {
+    background: #7d1a1a;
+    transform: scale(1.05);
+}
+
+/* Gallery Section (from previous request) */
+.gallery {
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.gallery-item {
+    width: 100%;
+    height: auto;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+}
+
+.gallery-item img:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .about-content, .mission-content {
+        flex-direction: column;
+    }
+    
+    .page-header {
+        padding: 2rem 0;
+    }
+    
+    .page-header h1 {
+        font-size: 2rem;
+    }
+    
+    .cta-buttons .btn-secondary {
+        margin-left: 0;
+        margin-top: 1rem;
+    }
+    
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .team-grid, .values-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</style>
+<section class="page-header">
+    <div class="container">
+        <h1>About Us</h1>
+    
+    </div>
+</section>
+
+<section class="about-intro">
+    <div class="container">
+        <div class="about-content">
+            <div class="about-image">
+                <img src="https://images.unsplash.com/photo-1544033527-b192daee1f5b?" alt="GymWord Facility">
+            </div>
+            <div class="about-text">
+                <h2>Our Story</h2>
+                <p>Founded in 2010, GymWord began with a simple mission: to create a fitness center that caters to people of all fitness levels and helps them achieve their health and wellness goals.</p>
+                <p>What started as a small gym with basic equipment has grown into a comprehensive fitness center with state-of-the-art facilities, expert trainers, and a supportive community of fitness enthusiasts.</p>
+                <p>Over the years, we've helped thousands of people transform their lives through personalized training programs, nutrition guidance, and a positive, motivating environment.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="our-mission">
+    <div class="container">
+        <div class="mission-content">
+            <div class="mission-text">
+                <h2>Our Mission</h2>
+                <p>At GymWord, our mission is to empower individuals to lead healthier, more active lives by providing them with the tools, knowledge, and support they need to achieve their fitness goals.</p>
+                <p>We believe that fitness is not just about physical strength, but also about mental well-being, confidence, and overall quality of life. That's why we take a holistic approach to fitness, focusing on all aspects of health and wellness.</p>
+                <p>Our goal is to create a welcoming, inclusive environment where everyone feels comfortable and motivated to pursue their fitness journey, regardless of their current fitness level or background.</p>
+            </div>
+            <div class="mission-image">
+                <img src="https://images.unsplash.com/photo-1554344728-7560c38c1720?" alt="Our Mission">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="our-values">
+    <div class="container">
+        <h2>Our Core Values</h2>
+        <div class="values-grid">
+            <div class="value-item">
+                <div class="value-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h3>Passion</h3>
+                <p>We are passionate about fitness and helping others achieve their goals. This passion drives everything we do.</p>
+            </div>
+            <div class="value-item">
+                <div class="value-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Community</h3>
+                <p>We foster a supportive community where members motivate and inspire each other.</p>
+            </div>
+            <div class="value-item">
+                <div class="value-icon">
+                    <i class="fas fa-medal"></i>
+                </div>
+                <h3>Excellence</h3>
+                <p>We strive for excellence in our facilities, programs, and customer service.</p>
+            </div>
+            <div class="value-item">
+                <div class="value-icon">
+                    <i class="fas fa-hands-helping"></i>
+                </div>
+                <h3>Support</h3>
+                <p>We provide personalized support to help each member achieve their unique fitness goals.</p>
+            </div>
+            <div class="value-item">
+                <div class="value-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <h3>Education</h3>
+                <p>We believe in educating our members about fitness, nutrition, and overall wellness.</p>
+            </div>
+            <div class="value-item">
+                <div class="value-icon">
+                    <i class="fas fa-balance-scale"></i>
+                </div>
+                <h3>Balance</h3>
+                <p>We promote a balanced approach to fitness that integrates physical, mental, and emotional well-being.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="our-team">
+    <div class="container">
+        <h2>Meet Our Team</h2>
+        <div class="team-grid">
+            {% for member in team_members %}
+            <div class="team-member">
+                {% if member.image %}
+                <img src="{{ member.image.url }}" alt="{{ member.name }}">
+                {% else %}
+                <img src="https://source.unsplash.com/400x400/?trainer" alt="{{ member.name }}">
+                {% endif %}
+                <h3>{{ member.name }}</h3>
+                <p class="position">{{ member.position }}</p>
+                <p class="bio">{{ member.bio }}</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="team-member">
+                <img src="https://source.unsplash.com/400x400/?trainer,male" alt="John Doe">
+                <h3>John Doe</h3>
+                <p class="position">Head Trainer</p>
+                <p class="bio">With over 10 years of experience, John specializes in strength training and functional fitness.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="team-member">
+                <img src="https://source.unsplash.com/400x400/?trainer,female" alt="Jane Smith">
+                <h3>Jane Smith</h3>
+                <p class="position">Yoga Instructor</p>
+                <p class="bio">Jane is a certified yoga instructor with expertise in Hatha and Vinyasa yoga.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="team-member">
+                <img src="https://source.unsplash.com/400x400/?nutritionist" alt="Mike Johnson">
+                <h3>Mike Johnson</h3>
+                <p class="position">Nutrition Specialist</p>
+                <p class="bio">Mike helps clients optimize their diet for better performance and results.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="team-member">
+                <img src="https://source.unsplash.com/400x400/?trainer,female" alt="Sarah Williams">
+                <h3>Sarah Williams</h3>
+                <p class="position">CrossFit Coach</p>
+                <p class="bio">Sarah is a CrossFit Level 2 Trainer with a passion for helping clients push their limits.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="team-cta">
+            <a href="{% url 'team' %}" class="btn btn-primary">View All Team Members</a>
+        </div>
+    </div>
+</section>
+
+<section class="testimonials">
+    <div class="container">
+        <h2>What Our Members Say</h2>
+        <div class="testimonial-slider">
+            <div class="testimonial">
+                <div class="testimonial-content">
+                    <p>"GymWord has completely transformed my fitness journey. The trainers are knowledgeable and supportive, and the facilities are top-notch. I've achieved results I never thought possible!"</p>
+                </div>
+                <div class="testimonial-author">
+                    <img src="https://source.unsplash.com/100x100/?person" alt="John D.">
+                    <div class="author-info">
+                        <h4>John D.</h4>
+                        <p>Member since 2019</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial">
+                <div class="testimonial-content">
+                    <p>"I've tried many gyms, but GymWord stands out with its variety of classes and friendly atmosphere. The results speak for themselves!"</p>
+                </div>
+                <div class="testimonial-author">
+                    <img src="https://source.unsplash.com/100x100/?woman" alt="Sarah M.">
+                    <div class="author-info">
+                        <h4>Sarah M.</h4>
+                        <p>Member since 2020</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial">
+                <div class="testimonial-content">
+                    <p>"The personal training sessions at GymWord have helped me achieve fitness goals I never thought possible. Highly recommend!"</p>
+                </div>
+                <div class="testimonial-author">
+                    <img src="https://source.unsplash.com/100x100/?man" alt="Michael T.">
+                    <div class="author-info">
+                        <h4>Michael T.</h4>
+                        <p>Member since 2018</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="container">
+        <h2>Ready to Start Your Fitness Journey?</h2>
+        <p>Join GymWord today and transform your life with our expert guidance and supportive community.</p>
+        <div class="cta-buttons">
+            <a href="{% url 'plans' %}" class="btn btn-primary">View Our Plans</a>
+            <a href="{% url 'contact' %}" class="btn btn-secondary">Contact Us</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Testimonial slider functionality could be added here
+    });
+</script>
+{% endblock %}
+

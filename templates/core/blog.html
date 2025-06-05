@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% block title %}Blog - GymWord{% endblock %}
+
+{% block content %}
+<style>
+    /* Red and White Theme */
+    :root {
+        --primary-red: #d32f2f;  /* Main red color */
+        --white: #ffffff;        /* White color */
+        --text-dark: #333;       /* Dark text color */
+        --text-muted: #666;      /* Muted text color */
+    }
+
+    /* Blog Section Styling */
+    .blog-section {
+        padding: 50px 0;
+        background: var(--white);
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .blog-section h2 {
+        text-align: center;
+        color: var(--primary-red);
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 40px;
+        border-bottom: 3px solid var(--primary-red);
+        display: inline-block;
+        padding-bottom: 10px;
+    }
+
+    .blog-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);  /* Three columns in one row */
+        gap: 30px;
+    }
+
+    .blog-post {
+        background: var(--white);
+        border: 2px solid var(--primary-red);
+        border-radius: 15px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+
+    .blog-post:hover {
+        transform: translateY(-5px);
+    }
+
+    .blog-post img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-bottom: 2px solid var(--primary-red);
+    }
+
+    .blog-post-content {
+        padding: 20px;
+    }
+
+    .blog-post h3 {
+        color: var(--primary-red);
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        line-height: 1.3;
+    }
+
+    .meta {
+        color: var(--text-muted);
+        font-size: 14px;
+        margin-bottom: 10px;
+        font-style: italic;
+    }
+
+    .meta span {
+        color: var(--primary-red);
+        font-weight: 500;
+    }
+
+    .blog-post p {
+        color: var(--text-dark);
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 15px;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background: var(--primary-red);
+        color: var(--white);
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: 500;
+        transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+        background: #b71c1c;  /* Slightly darker red on hover */
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+        .blog-grid {
+            grid-template-columns: repeat(2, 1fr);  /* Two columns on medium screens */
+        }
+    }
+
+    @media (max-width: 768px) {
+        .blog-grid {
+            grid-template-columns: 1fr;  /* One column on small screens */
+        }
+
+        .blog-section h2 {
+            font-size: 30px;
+        }
+
+        .blog-post h3 {
+            font-size: 20px;
+        }
+    }
+</style>
+
+<section class="blog-section">
+    <div class="container">
+        <h2>Our Blog</h2>
+        
+        <div class="blog-grid">
+            {% for post in posts %}
+            <div class="blog-post">
+                {% if post.image %}
+                <img src="{{ post.image.url }}" alt="{{ post.title }}">
+                {% else %}
+                <img src="https://source.unsplash.com/800x600/?fitness" alt="{{ post.title }}">
+                {% endif %}
+                <div class="blog-post-content">
+                    <h3>{{ post.title }}</h3>
+                    <p class="meta">
+                        <span>{{ post.created_at|date:"M d, Y" }}</span> by 
+                        <span>{{ post.author.get_full_name|default:post.author.username }}</span>
+                    </p>
+                    <p>{{ post.content|truncatewords:30 }}</p>
+                    <a href="{% url 'blog_detail' post.id %}" class="btn">Read More</a>
+                </div>
+            </div>
+            {% empty %}
+            <p>No blog posts available at the moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

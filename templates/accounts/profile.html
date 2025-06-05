@@ -1,0 +1,272 @@
+{% extends 'base.html' %}
+
+{% block title %}Your Profile - GymWord{% endblock %}
+
+{% block content %}
+<section class="profile-section">
+    <div class="container">
+        <h2>Your Profile</h2>
+        
+        <div class="profile-grid">
+            <div class="profile-info">
+                <h3>Account Information</h3>
+                <p><strong>Username:</strong> {{ user.username }}</p>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>Name:</strong> {{ user.get_full_name }}</p>
+                <p><strong>Mobile:</strong> {{ user.profile.mobile|default:"Not provided" }}</p>
+                <p><strong>Address:</strong> {{ user.profile.address|default:"Not provided" }}</p>
+                <p><strong>Gender:</strong> {{ user.profile.get_gender_display|default:"Not provided" }}</p>
+                <p><strong>Date of Birth:</strong> {{ user.profile.dob|date:"F d, Y"|default:"Not provided" }}</p>
+                
+                <div class="profile-actions">
+                    <a href="{% url 'change_password' %}" class="btn btn-secondary">Change Password</a>
+                </div>
+            </div>
+            
+            <div class="profile-edit">
+                <h3>Edit Profile</h3>
+                <form method="post" class="profile-form">
+                    {% csrf_token %}
+                    
+                    <h4>Account Information</h4>
+                    {{ user_form.non_field_errors }}
+                    
+                    <div class="form-group">
+                        <label for="{{ user_form.username.id_for_label }}">Username</label>
+                        {{ user_form.username }}
+                        {{ user_form.username.errors }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ user_form.email.id_for_label }}">Email</label>
+                        {{ user_form.email }}
+                        {{ user_form.email.errors }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ user_form.first_name.id_for_label }}">First Name</label>
+                        {{ user_form.first_name }}
+                        {{ user_form.first_name.errors }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ user_form.last_name.id_for_label }}">Last Name</label>
+                        {{ user_form.last_name }}
+                        {{ user_form.last_name.errors }}
+                    </div>
+                    
+                    <h4>Profile Information</h4>
+                    {{ profile_form.non_field_errors }}
+                    
+                    <div class="form-group">
+                        <label for="{{ profile_form.mobile.id_for_label }}">Mobile Number</label>
+                        {{ profile_form.mobile }}
+                        {{ profile_form.mobile.errors }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ profile_form.address.id_for_label }}">Address</label>
+                        {{ profile_form.address }}
+                        {{ profile_form.address.errors }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ profile_form.gender.id_for_label }}">Gender</label>
+                        {{ profile_form.gender }}
+                        {{ profile_form.gender.errors }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ profile_form.dob.id_for_label }}">Date of Birth</label>
+                        {{ profile_form.dob }}
+                        {{ profile_form.dob.errors }}
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<style>
+    /* Profile Section Styles */
+    .profile-section {
+        padding: 60px 0;
+        background-color: #f9f9f9; /* Light gray background for contrast */
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .profile-section h2 {
+        text-align: center;
+        color: #ff0000; /* Red color for the main heading */
+        margin-bottom: 40px;
+        font-size: 32px;
+        font-weight: bold;
+    }
+
+    .profile-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        justify-content: center;
+    }
+
+    /* Profile Info Card */
+    .profile-info {
+        flex: 1;
+        min-width: 300px;
+        background: #fff; /* White background for the card */
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        padding: 30px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .profile-info:hover {
+        transform: translateY(-5px); /* Slight lift on hover */
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+    }
+
+    .profile-info h3 {
+        color: #ff0000; /* Red color for the heading */
+        font-size: 24px;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #ff0000; /* Red underline */
+        padding-bottom: 10px;
+    }
+
+    .profile-info p {
+        margin: 10px 0;
+        font-size: 16px;
+        color: #333; /* Dark gray for text */
+    }
+
+    .profile-info p strong {
+        color: #ff0000; /* Red color for labels */
+        font-weight: bold;
+    }
+
+    .profile-actions {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .profile-actions .btn {
+        padding: 12px 30px;
+        background: #ff0000; /* Red background for the button */
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+    .profile-actions .btn:hover {
+        background: #e60000; /* Slightly darker red on hover */
+        transform: scale(1.05); /* Slight scale effect on hover */
+    }
+
+    /* Profile Edit Form */
+    .profile-edit {
+        flex: 1;
+        min-width: 300px;
+        background: #fff; /* White background for the form card */
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        padding: 30px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .profile-edit:hover {
+        transform: translateY(-5px); /* Slight lift on hover */
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+    }
+
+    .profile-edit h3 {
+        color: #ff0000; /* Red color for the heading */
+        font-size: 24px;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #ff0000; /* Red underline */
+        padding-bottom: 10px;
+    }
+
+    .profile-edit h4 {
+        color: #333; /* Dark gray for subheadings */
+        font-size: 18px;
+        margin: 20px 0 10px;
+        border-left: 4px solid #ff0000; /* Red left border for subheadings */
+        padding-left: 10px;
+    }
+
+    .profile-form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        font-size: 14px;
+        color: #ff0000; /* Red color for labels */
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        width: 100%;
+        box-sizing: border-box;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        border-color: #ff0000; /* Red border on focus */
+        outline: none;
+        box-shadow: 0 0 5px rgba(255, 0, 0, 0.2); /* Subtle red glow on focus */
+    }
+
+    .form-group .errorlist {
+        color: #ff0000; /* Red color for error messages */
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+    .profile-form button.btn {
+        padding: 12px 30px;
+        background: #ff0000; /* Red background for the button */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        align-self: center;
+        margin-top: 20px;
+    }
+
+    .profile-form button.btn:hover {
+        background: #e60000; /* Slightly darker red on hover */
+        transform: scale(1.05); /* Slight scale effect on hover */
+    }
+</style>
+{% endblock %}

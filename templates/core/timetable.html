@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+{% block title %}Class Timetable - GymWord{% endblock %}
+<style>
+    .timetable-section {
+    padding: 20px;
+    text-align: center;
+}
+
+.timetable {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.timetable-header {
+    display: flex;
+    background-color: #e63946;
+    color: white;
+    font-weight: bold;
+}
+
+.timetable-header div {
+    flex: 1;
+    padding: 10px;
+    border-right: 1px solid #fff;
+}
+
+.timetable-header div:last-child {
+    border-right: none;
+}
+
+.timetable-row {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+}
+
+.timetable-row div {
+    flex: 1;
+    padding: 10px;
+    border-right: 1px solid #ddd;
+}
+
+.timetable-row div:last-child {
+    border-right: none;
+}
+
+.timetable-class {
+    background-color: #f8f9fa;
+}
+
+.timetable-actions {
+    margin-top: 20px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+</style>
+{% block content %}
+<section class="timetable-section">
+    <div class="container">
+        <h2>Class Timetable</h2>
+        
+        <div class="timetable">
+            <div class="timetable-header">
+                <div>Time</div>
+                {% for day in days %}
+                <div>{{ day }}</div>
+                {% endfor %}
+            </div>
+            
+            {% for time in times %}
+            <div class="timetable-row">
+                <div>{{ time }}</div>
+                {% for day in days %}
+                <div class="timetable-class">{{ timetable|get_item:day|get_item:time }}</div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="timetable-actions">
+            <a href="{% url 'booking' %}" class="btn btn-primary">Book a Class</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
